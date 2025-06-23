@@ -1,10 +1,10 @@
 "use client";
 import { useClubStore } from "@/store";
 import React from "react";
+import { PlayerInput } from "../setup/PlayerInput";
 
 const TeamView = ({ teamId }: { teamId: string }) => {
 	const getTeam = useClubStore((state) => state.getTeamById);
-
 	const team = getTeam(teamId);
 
 	console.log(team);
@@ -12,7 +12,14 @@ const TeamView = ({ teamId }: { teamId: string }) => {
 		return <div>Team not found</div>;
 	}
 
-	return <div>Team : {team.name}</div>;
+	return (
+		<div>
+			Team : {team.name}
+			<div className="mt-20">
+				<PlayerInput teamId={teamId} />
+			</div>
+		</div>
+	);
 };
 
 export default TeamView;

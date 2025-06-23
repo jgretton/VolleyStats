@@ -1,6 +1,13 @@
+export interface Player {
+	id: string;
+	name: string;
+	number: number | undefined;
+	position: string;
+}
 export interface Team {
 	id: string;
 	name: string;
+	players: Player[];
 }
 
 export interface Club {
@@ -14,4 +21,8 @@ export interface ClubStore {
 	addTeam: (teamName: string) => void;
 	removeTeam: (teamName: string) => void;
 	getTeamById: (teamId: string) => Team | undefined;
+	addPlayerToTeam: (teamId: string, player: Omit<Player, "id">) => void;
+	getPlayersByTeamId: (teamId: string) => Player[];
 }
+
+// type VolleyballPosition = "OH" | "S" | "OP" | "MB" | "LI";

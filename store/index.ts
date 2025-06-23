@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { ClubStore } from "./types";
+import { ClubStore, Player } from "./types";
 
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -22,12 +22,12 @@ export const useClubStore = create<ClubStore>()(
 							{
 								id: crypto.randomUUID(),
 								name: teamName,
+								players: [],
 							},
 						],
 					},
 				}));
 			},
-
 			removeTeam: (teamId: string) => {
 				set((state) => {
 					const newClub = state.club.teams.filter((team) => team.id !== teamId);
@@ -37,6 +37,50 @@ export const useClubStore = create<ClubStore>()(
 			getTeamById: (teamId: string) => {
 				const currentState = get();
 				return currentState.club.teams.find((team) => team.id === teamId);
+			},
+			addPlayerToTeam: (teamId: string, player: Omit<Player, "id">) => {
+				const currentState = get();
+				const currentTeamIndex = currentState.club.teams.findIndex(
+					(team) => team.id === teamId
+				);
+
+				const newPlayer: Player = {
+					id: crypto.randomUUID(),
+					...player,
+				};
+
+				set((state) => {
+					const newTeams = [...state.club.teams];
+					newTeams[currentTeamIndex] = {
+						...newTeams[currentTeamIndex],
+						players: [...newTeams[currentTeamIndex].players, newPlayer],
+					};
+					return { club: { ...state.club, teams: newTeams } };
+				});
+
+				// set((state) => ({
+				// 	club: {
+				// 		...state.club,
+				// 		teams: state.club.teams.map((team) => {
+				// 			if (team.id === teamId) {
+				// 				return {
+				// 					...team,
+				// 					players: [...team.players, newPlayer],
+				// 				};
+				// 			} else {
+				// 				return team;
+				// 			}
+				// 		}),
+				// 	},
+				// }));
+			},
+			getPlayersByTeamId: (teamId: string) => {
+				const currentState = get();
+				const currentTeam = currentState.club.teams.find(
+					(team) => team.id === teamId
+				);
+				if (!currentTeam) return [];
+				return currentTeam.players;
 			},
 		}),
 		{

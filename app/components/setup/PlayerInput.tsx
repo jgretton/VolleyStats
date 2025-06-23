@@ -1,36 +1,40 @@
 "use client";
 
 import React, { useState } from "react";
-import { Player, VOLLEYBALL_POSITIONS, VolleyballPosition } from "@/types";
+import { VOLLEYBALL_POSITIONS, VolleyballPosition } from "@/types";
 
-export const PlayerInput = () => {
-	const [playerList, setPlayerList] = useState<Player[]>([]);
-	const [playerDetails, setPlayerDetails] = useState<Partial<Player>>({});
+import { Player } from "@/store/types";
+import { useClubStore } from "@/store";
+
+const defaultPlayerObject = {
+	name: "",
+	position: "",
+	number: undefined,
+};
+
+export const PlayerInput = ({ teamId }: { teamId: string }) => {
+	const [playerDetails, setPlayerDetails] =
+		useState<Omit<Player, "id">>(defaultPlayerObject);
+
+	const addPlayer = useClubStore((state) => state.addPlayerToTeam);
+	const getPlayers = useClubStore((state) => state.getPlayersByTeamId);
+
+	const players = getPlayers(teamId);
 
 	const onFormSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+
 		if (
-			!playerDetails?.name ||
-			!playerDetails?.number ||
-			!playerDetails?.position
+			!playerDetails.name ||
+			!playerDetails.number ||
+			!playerDetails.position
 		) {
 			console.log("Missing required fields");
 			return;
 		}
 
-		const newPlayer: Player = {
-			id: crypto.randomUUID(),
-			name: playerDetails.name!,
-			number: playerDetails.number!,
-			position: playerDetails.position,
-		};
-
-		setPlayerList((prevState) => {
-			return [...prevState, newPlayer];
-		});
-
-		console.log(newPlayer);
-		setPlayerDetails({});
+		addPlayer(teamId, playerDetails);
+		setPlayerDetails(defaultPlayerObject);
 	};
 
 	return (
@@ -38,7 +42,7 @@ export const PlayerInput = () => {
 			<form onSubmit={onFormSubmit}>
 				<input
 					type="text"
-					value={playerDetails?.name ?? ""}
+					value={playerDetails.name ?? ""}
 					onChange={(e) =>
 						setPlayerDetails((prevState) => ({
 							...prevState,
@@ -50,14 +54,13 @@ export const PlayerInput = () => {
 				/>
 				<input
 					type="number"
-					value={playerDetails?.number ?? ""}
+					value={playerDetails.number ?? ""}
+					min={1}
+					max={99}
 					onChange={(e) =>
 						setPlayerDetails((prevState) => ({
 							...prevState,
-							number:
-								e.target.value === ""
-									? undefined
-									: parseInt(e.target.value, 10),
+							number: e.target.value === "" ? 0 : parseInt(e.target.value, 10),
 						}))
 					}
 					name="number"
@@ -67,7 +70,7 @@ export const PlayerInput = () => {
 				<select
 					className="ml-3"
 					name="position"
-					value={playerDetails?.position ?? ""}
+					value={playerDetails.position ?? ""}
 					onChange={(e) =>
 						setPlayerDetails((prevState) => ({
 							...prevState,
@@ -91,13 +94,17 @@ export const PlayerInput = () => {
 				</button>
 			</form>
 
-			<ul>
-				{playerList.map((player) => (
-					<li key={player.id}>
-						{player.name} : {player.number} : {player.position}
-					</li>
-				))}
-			</ul>
+			<div className="mt-10">
+				{players.length === 0 ? (
+					<div>No players</div>
+				) : (
+					players.map((player) => (
+						<p key={player.id}>
+							{player.name} : {player.number} : {player.position}
+						</p>
+					))
+				)}
+			</div>
 		</div>
 	);
 };
