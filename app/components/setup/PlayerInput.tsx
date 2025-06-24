@@ -17,9 +17,6 @@ export const PlayerInput = ({ teamId }: { teamId: string }) => {
 		useState<Omit<Player, "id">>(defaultPlayerObject);
 
 	const addPlayer = useClubStore((state) => state.addPlayerToTeam);
-	const getPlayers = useClubStore((state) => state.getPlayersByTeamId);
-
-	const players = getPlayers(teamId);
 
 	const onFormSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -93,18 +90,6 @@ export const PlayerInput = ({ teamId }: { teamId: string }) => {
 					Add
 				</button>
 			</form>
-
-			<div className="mt-10">
-				{players.length === 0 ? (
-					<div>No players</div>
-				) : (
-					players.map((player) => (
-						<p key={player.id}>
-							{player.name} : {player.number} : {player.position}
-						</p>
-					))
-				)}
-			</div>
 		</div>
 	);
 };

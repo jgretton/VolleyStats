@@ -82,6 +82,26 @@ export const useClubStore = create<ClubStore>()(
 				if (!currentTeam) return [];
 				return currentTeam.players;
 			},
+			removePlayerFromTeam: (teamId: string, playerId: string) => {
+				set((state) => {
+					const teamIndex = state.club.teams.findIndex(
+						(team) => team.id === teamId
+					);
+					if (teamIndex === -1) return state;
+
+					const newPlayerList = state.club.teams[teamIndex].players.filter(
+						(player) => player.id !== playerId
+					);
+
+					const teams = [...state.club.teams];
+					teams[teamIndex] = {
+						...teams[teamIndex],
+						players: newPlayerList,
+					};
+
+					return { club: { ...state.club, teams: teams } };
+				});
+			},
 		}),
 		{
 			name: "Lincoln-cannons-club",

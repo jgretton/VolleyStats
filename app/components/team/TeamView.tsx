@@ -2,6 +2,7 @@
 import { useClubStore } from "@/store";
 import React from "react";
 import { PlayerInput } from "../setup/PlayerInput";
+import PlayerList from "../players/playerList";
 
 const TeamView = ({ teamId }: { teamId: string }) => {
 	const getTeam = useClubStore((state) => state.getTeamById);
@@ -17,6 +18,7 @@ const TeamView = ({ teamId }: { teamId: string }) => {
 			Team : {team.name}
 			<div className="mt-20">
 				<PlayerInput teamId={teamId} />
+				<PlayerList teamId={teamId} />
 			</div>
 		</div>
 	);

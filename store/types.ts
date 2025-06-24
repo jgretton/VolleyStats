@@ -23,6 +23,7 @@ export interface ClubStore {
 	getTeamById: (teamId: string) => Team | undefined;
 	addPlayerToTeam: (teamId: string, player: Omit<Player, "id">) => void;
 	getPlayersByTeamId: (teamId: string) => Player[];
+	removePlayerFromTeam: (teamId: string, playerId: string) => void;
 }
 
 // type VolleyballPosition = "OH" | "S" | "OP" | "MB" | "LI";
