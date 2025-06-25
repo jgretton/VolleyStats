@@ -20,6 +20,7 @@ export interface ClubStore {
 	club: Club;
 	addTeam: (teamName: string) => void;
 	removeTeam: (teamName: string) => void;
+	updateTeam: (teamId: string, teamName: string) => void;
 	getTeamById: (teamId: string) => Team | undefined;
 	addPlayerToTeam: (teamId: string, player: Omit<Player, "id">) => void;
 	getPlayersByTeamId: (teamId: string) => Player[];

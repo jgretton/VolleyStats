@@ -34,6 +34,16 @@ export const useClubStore = create<ClubStore>()(
 					return { club: { ...state.club, teams: newClub } };
 				});
 			},
+			updateTeam: (teamId: string, teamName: string) => {
+				set((state) => {
+					const currentTeamIndex = state.club.teams.findIndex(
+						(team) => team.id === teamId
+					);
+					const newTeam = [...state.club.teams];
+					newTeam[currentTeamIndex].name = teamName;
+					return { club: { ...state.club, teams: newTeam } };
+				});
+			},
 			getTeamById: (teamId: string) => {
 				const currentState = get();
 				return currentState.club.teams.find((team) => team.id === teamId);
