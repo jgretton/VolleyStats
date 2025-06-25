@@ -102,6 +102,26 @@ export const useClubStore = create<ClubStore>()(
 					return { club: { ...state.club, teams: teams } };
 				});
 			},
+			updatePlayer: (teamId: string, player: Player) => {
+				console.log(player);
+				set((state) => {
+					const currentTeamIndex = state.club.teams.findIndex(
+						(team) => team.id === teamId
+					);
+
+					const currentPlayerIndex = state.club.teams[
+						currentTeamIndex
+					].players.findIndex((p) => p.id === player.id);
+
+					const newTeam = [...state.club.teams];
+					const currentPlayers = [...newTeam[currentTeamIndex].players];
+
+					currentPlayers[currentPlayerIndex] = player;
+					newTeam[currentTeamIndex].players = [...currentPlayers];
+
+					return { club: { ...state.club, teams: newTeam } };
+				});
+			},
 		}),
 		{
 			name: "Lincoln-cannons-club",

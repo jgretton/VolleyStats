@@ -24,6 +24,7 @@ export interface ClubStore {
 	addPlayerToTeam: (teamId: string, player: Omit<Player, "id">) => void;
 	getPlayersByTeamId: (teamId: string) => Player[];
 	removePlayerFromTeam: (teamId: string, playerId: string) => void;
+	updatePlayer: (teamId: string, player: Player) => void;
 }
 
 // type VolleyballPosition = "OH" | "S" | "OP" | "MB" | "LI";
