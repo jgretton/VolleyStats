@@ -1,9 +1,4 @@
-export interface Player {
-	id: string;
-	name: string;
-	number: number;
-	position: VolleyballPosition;
-}
+import { Player, Team } from "@/store/types";
 
 export type VolleyballPosition = "OH" | "S" | "OP" | "MB" | "LI";
 
@@ -14,3 +9,21 @@ export const VOLLEYBALL_POSITIONS = {
 	MB: "Middle Blocker",
 	LI: "Libero",
 } as const;
+
+export type ModalType = "editPlayer" | "addPlayer" | "editTeam" | "addTeam";
+export type ModalData =
+	| { type: "editPlayer"; player: Player; teamId: string }
+	| { type: "addPlayer"; teamId: string }
+	| { type: "editTeam"; team: Team }
+	| { type: "addTeam"; data: null }
+	| null;
+export interface ModalState {
+	isOpen: boolean;
+	type: ModalType | null;
+	data:
+		| Player
+		| Team
+		| { teamId: string }
+		| { player: Player; teamId: string }
+		| null;
+}

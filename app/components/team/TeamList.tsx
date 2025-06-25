@@ -32,6 +32,12 @@ const TeamList = () => {
 								>
 									Delete
 								</button>
+								<button
+									className="mx-4 px-4 py-3 text-white bg-blue-400 rounded-lg"
+									onClick={() => handleDelete(team.id)}
+								>
+									Edit
+								</button>
 								<Link href={`/teams/${team.id}`}>View </Link>
 							</li>
 						))}

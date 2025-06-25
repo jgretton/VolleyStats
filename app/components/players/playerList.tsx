@@ -1,28 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useClubStore } from "@/store";
-import Modal from "../modal/Modal";
-import { Player } from "@/store/types";
-import EditPlayerForm from "./EditPlayerForm";
+import { useAppModal } from "@/hooks/useAppModal";
+import { AppModal } from "../modal/AppModal";
 
 const PlayerList = ({ teamId }: { teamId: string }) => {
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-	const [selectedPlayer, setSelectedPlayer] = useState<Player>({
-		id: "",
-		name: "",
-		number: undefined,
-		position: "",
-	});
+	const { isOpen, modalType, modalData, closeModal, openEditPlayer } =
+		useAppModal();
 
 	const players = useClubStore((state) => state.getPlayersByTeamId(teamId));
 	const removePlayer = useClubStore((state) => state.removePlayerFromTeam);
 
 	const handleDelete = (teamId: string, playerId: string) => {
 		removePlayer(teamId, playerId);
-	};
-	const closeModal = () => {
-		setIsModalOpen(false);
 	};
 
 	return (
@@ -44,8 +35,7 @@ const PlayerList = ({ teamId }: { teamId: string }) => {
 						<button
 							className="mx-4 px-4 py-3 text-white bg-blue-400 rounded-lg cursor-pointer"
 							onClick={() => {
-								setIsModalOpen(true);
-								setSelectedPlayer(player);
+								openEditPlayer(player, teamId);
 							}}
 						>
 							Edit
@@ -53,18 +43,12 @@ const PlayerList = ({ teamId }: { teamId: string }) => {
 					</div>
 				))
 			)}
-
-			<Modal
-				title="Edit player"
-				isModalOpen={isModalOpen}
+			<AppModal
 				closeModal={closeModal}
-			>
-				<EditPlayerForm
-					selectedPlayer={selectedPlayer}
-					teamId={teamId}
-					closeModal={closeModal}
-				/>
-			</Modal>
+				isOpen={isOpen}
+				modalType={modalType}
+				modalData={modalData}
+			/>
 		</div>
 	);
 };

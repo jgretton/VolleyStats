@@ -6,13 +6,13 @@ import React, { useEffect, useState } from "react";
 import { useClubStore } from "@/store";
 
 const EditPlayerForm = ({
-	selectedPlayer,
+	player,
 	teamId,
-	closeModal,
+	onSave,
 }: {
-	selectedPlayer: Player;
+	player: Player;
 	teamId: string;
-	closeModal: () => void;
+	onSave: () => void;
 }) => {
 	const handleUpdatePlayer = useClubStore((state) => state.updatePlayer);
 	const [updatedPlayer, setUpdatedPlayer] = useState<Player>({
@@ -23,10 +23,10 @@ const EditPlayerForm = ({
 	});
 
 	useEffect(() => {
-		if (!selectedPlayer) {
+		if (!player) {
 			return;
-		} else setUpdatedPlayer(selectedPlayer);
-	}, [selectedPlayer]);
+		} else setUpdatedPlayer(player);
+	}, [player]);
 
 	const handleOnChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -42,7 +42,7 @@ const EditPlayerForm = ({
 	const handleSave = (e: React.FormEvent) => {
 		e.preventDefault();
 		handleUpdatePlayer(teamId, updatedPlayer);
-		closeModal();
+		onSave();
 	};
 
 	return (

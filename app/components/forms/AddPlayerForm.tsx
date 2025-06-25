@@ -12,7 +12,13 @@ const defaultPlayerObject = {
 	number: undefined,
 };
 
-export const PlayerInput = ({ teamId }: { teamId: string }) => {
+export const AddPlayerForm = ({
+	teamId,
+	onSave,
+}: {
+	teamId: string;
+	onSave: () => void;
+}) => {
 	const [playerDetails, setPlayerDetails] =
 		useState<Omit<Player, "id">>(defaultPlayerObject);
 
@@ -32,6 +38,7 @@ export const PlayerInput = ({ teamId }: { teamId: string }) => {
 
 		addPlayer(teamId, playerDetails);
 		setPlayerDetails(defaultPlayerObject);
+		onSave();
 	};
 
 	return (

@@ -1,7 +1,8 @@
 ✔ delete players from teams @done(25-06-24 13:04)
 ☐ add edit feature to team names and player information
-    ☐ Move pplayerlist modal to a seperate component called EditPlayerForm. 
-    ☐ add updatePlayer to zustand.
+    ✔ Move pplayerlist modal to a seperate component called EditPlayerForm. @done(25-06-25 12:45)
+    ✔ add updatePlayer to zustand. @done(25-06-25 12:45)
+    ☐ update Team name
 ☐ creating a match
     ☐ Add players to match
     ☐ select starting lineup
