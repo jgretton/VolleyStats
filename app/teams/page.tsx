@@ -7,7 +7,7 @@ export default function Page() {
 	const { closeModal, modalData, modalType, openAddTeam, isOpen } =
 		useAppModal();
 	return (
-		<div className="">
+		<div className="p-5">
 			<button
 				type="button"
 				className="mx-4 px-4 py-3 text-white bg-blue-400 rounded-lg cursor-pointer"

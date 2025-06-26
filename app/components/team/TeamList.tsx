@@ -3,7 +3,11 @@
 import React from "react";
 import { useClubStore } from "@/store";
 import Link from "next/link";
+import { useAppModal } from "@/hooks/useAppModal";
+import { AppModal } from "../modal/AppModal";
 const TeamList = () => {
+	const { isOpen, modalData, modalType, closeModal, openEditTeam } =
+		useAppModal();
 	const teams = useClubStore((state) => state.club.teams);
 	const clubName = useClubStore((state) => state.club.name);
 	const removeTeam = useClubStore((state) => state.removeTeam);
@@ -34,7 +38,7 @@ const TeamList = () => {
 								</button>
 								<button
 									className="mx-4 px-4 py-3 text-white bg-blue-400 rounded-lg"
-									onClick={() => handleDelete(team.id)}
+									onClick={() => openEditTeam(team)}
 								>
 									Edit
 								</button>
@@ -43,6 +47,13 @@ const TeamList = () => {
 						))}
 					</ul>
 				)}
+
+				<AppModal
+					isOpen={isOpen}
+					modalData={modalData}
+					modalType={modalType}
+					closeModal={closeModal}
+				/>
 			</div>
 		);
 };

@@ -19,7 +19,7 @@ export const AddTeamForm = ({ onSave }: { onSave: () => void }) => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={(e) => handleSubmit(e)}>
 			<label>
 				Team Name:
 				<input

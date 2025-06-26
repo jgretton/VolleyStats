@@ -15,7 +15,7 @@ const TeamView = ({ teamId }: { teamId: string }) => {
 	}
 
 	return (
-		<div className="relative">
+		<div className="relative p-10">
 			Team : {team.name}
 			<div className="mt-20">
 				<button
