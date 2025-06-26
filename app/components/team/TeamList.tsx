@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useClubStore } from "@/store";
-import Link from "next/link";
 import { useAppModal } from "@/hooks/useAppModal";
 import { AppModal } from "../modal/AppModal";
 import { Team } from "@/store/types";
