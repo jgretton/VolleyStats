@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import NavBar from "./components/navigation/NavBar";
+import { AppSidebar } from "./components/navigation/AppSidebar";
 export const metadata: Metadata = {
 	title: "Volleyball Stats",
 	description: "Volleybell stats app.",
@@ -13,11 +13,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`antialiased`}>
-				<div className="">
-					<NavBar />
-				</div>
-				<main className="mt-10">{children}</main>
+			<body className={`antialiased flex flex-row`}>
+				<AppSidebar />
+				<main className=" flex-1">{children}</main>
 			</body>
 		</html>
 	);

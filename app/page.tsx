@@ -1,12 +1,7 @@
-import Link from "next/link";
-
 export default function Home() {
 	return (
 		<div className="">
-			Hello world
-			<div className="mt-20 p-4">
-				<Link href={"/teams"}>Teams</Link>
-			</div>
+			<h1 className="text-center font-semibold text-2xl">Volleyball Stats </h1>
 		</div>
 	);
 }

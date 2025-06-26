@@ -5,47 +5,45 @@ import { useClubStore } from "@/store";
 import Link from "next/link";
 import { useAppModal } from "@/hooks/useAppModal";
 import { AppModal } from "../modal/AppModal";
+import { Team } from "@/store/types";
+import { TeamCard } from "../cards/TeamCard";
 const TeamList = () => {
-	const { isOpen, modalData, modalType, closeModal, openEditTeam } =
+	const { isOpen, modalData, modalType, closeModal, openAddTeam } =
 		useAppModal();
 	const teams = useClubStore((state) => state.club.teams);
 	const clubName = useClubStore((state) => state.club.name);
-	const removeTeam = useClubStore((state) => state.removeTeam);
-
-	const handleDelete = (teamId: string) => {
-		removeTeam(teamId);
-	};
 
 	if (!teams) {
 		return <div>No Teams</div>;
 	} else
 		return (
-			<div>
-				<h2>{clubName} Teams</h2>
+			<div className="">
+				<h2 className="font-semibold text-2xl leading-none">
+					{clubName} Teams
+				</h2>
 				{teams?.length === 0 ? (
-					<p>No teams created yet</p>
+					<div className="grid mt-10 gap-10">
+						You havent added any teams, would you like to?
+						<button
+							type="button"
+							className=" px-4 py-3 text-white bg-blue-400 rounded-lg cursor-pointer"
+							onClick={() => openAddTeam()}
+						>
+							+ Add New Team
+						</button>
+						<AppModal
+							closeModal={closeModal}
+							modalData={modalData}
+							modalType={modalType}
+							isOpen={isOpen}
+						/>
+					</div>
 				) : (
-					<ul>
-						{teams?.map((team) => (
-							<li key={team.id} className="p-2 border-b">
-								{team.name}
-
-								<button
-									className="mx-4 px-4 py-3 text-white bg-red-400 rounded-lg"
-									onClick={() => handleDelete(team.id)}
-								>
-									Delete
-								</button>
-								<button
-									className="mx-4 px-4 py-3 text-white bg-blue-400 rounded-lg"
-									onClick={() => openEditTeam(team)}
-								>
-									Edit
-								</button>
-								<Link href={`/teams/${team.id}`}>View </Link>
-							</li>
+					<div className="mt-10">
+						{teams.map((team: Team) => (
+							<TeamCard key={team.id} team={team} />
 						))}
-					</ul>
+					</div>
 				)}
 
 				<AppModal
