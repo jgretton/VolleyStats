@@ -20,6 +20,14 @@ const TeamList = () => {
 				<h2 className="font-semibold text-2xl leading-none">
 					{clubName} Teams
 				</h2>
+				<div className="mt-10">
+					<button
+						className="py-2 px-4 rounded-md bg-blue-500 text-white cursor-pointer"
+						onClick={() => openAddTeam()}
+					>
+						+ add team
+					</button>
+				</div>
 				{teams?.length === 0 ? (
 					<div className="grid mt-10 gap-10">
 						You havent added any teams, would you like to?

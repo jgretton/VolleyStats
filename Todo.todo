@@ -6,9 +6,23 @@
 
 
 ☐ UI/UX
+    - dashboard layout
+    ☐ make dropdown menu - <details> and <summary>
+    - Tabs
+        - Team Management
+        - Match Management
+        - 
+
+
+
 Error Handling:
+
     ☐ Zustand store
     ☐ all forms
 ☐ creating a match
     ☐ Add players to match
     ☐ select starting lineup
+
+
+    TODO:
+        ☐ Add player form, number is throwin error due to going from undefined to number.

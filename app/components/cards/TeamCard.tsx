@@ -15,7 +15,7 @@ import { useAppModal } from "@/hooks/useAppModal";
 export const TeamCard = ({ team }: { team: Team }) => {
 	const { isOpen, modalData, modalType, closeModal, openEditTeam } =
 		useAppModal();
-	const { removeTeam, updateTeam } = useClubStore();
+	const { removeTeam } = useClubStore();
 	return (
 		<div className="bg-gray-50 p-5 rounded-lg shadow-sm max-w-md w-full">
 			<div className="flex flex-row w-full">

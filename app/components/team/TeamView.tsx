@@ -2,12 +2,7 @@
 import { useClubStore } from "@/store";
 import React from "react";
 import PlayerList from "../players/playerList";
-import { useAppModal } from "@/hooks/useAppModal";
-import { AppModal } from "../modal/AppModal";
 const TeamView = ({ teamId }: { teamId: string }) => {
-	const { isOpen, modalType, modalData, closeModal, openAddPlayer } =
-		useAppModal();
-
 	const getTeam = useClubStore((state) => state.getTeamById);
 	const team = getTeam(teamId);
 	if (!team) {
@@ -16,24 +11,13 @@ const TeamView = ({ teamId }: { teamId: string }) => {
 
 	return (
 		<div className="relative p-10">
-			Team : {team.name}
-			<div className="mt-20">
-				<button
-					type="button"
-					onClick={() => openAddPlayer(teamId)}
-					className="px-4 py-2 rounded-md bg-teal-300 cursor-pointer"
-				>
-					+ Add Player
-				</button>
-
+			<h2 className="font-medium text-2xl">
+				Team <br />
+				<span className="font-normal text-xl pl-2">{team.name}</span>
+			</h2>
+			<div className="mt-10">
 				<PlayerList teamId={teamId} />
 			</div>
-			<AppModal
-				isOpen={isOpen}
-				modalType={modalType}
-				modalData={modalData}
-				closeModal={closeModal}
-			/>
 		</div>
 	);
 };
