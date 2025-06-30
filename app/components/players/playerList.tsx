@@ -13,6 +13,7 @@ const PlayerList = ({ teamId }: { teamId: string }) => {
 		closeModal,
 		openEditPlayer,
 		openAddPlayer,
+		openConfirmDelete,
 	} = useAppModal();
 
 	const players = useClubStore((state) => state.getPlayersByTeamId(teamId));
@@ -58,7 +59,7 @@ const PlayerList = ({ teamId }: { teamId: string }) => {
 						players.map((player) => (
 							<tr key={player.id} className="text-center even:bg-gray-100">
 								<td className="">
-									<p>{player.name}</p>
+									<p className="capitalize">{player.name}</p>
 								</td>
 								<td className="">
 									<p>{player.number}</p>
@@ -69,7 +70,8 @@ const PlayerList = ({ teamId }: { teamId: string }) => {
 								<td className="flex gap-3 items-center justify-center py-2">
 									<button
 										className="px-4 py-2 text-white bg-red-400 rounded-lg cursor-pointer"
-										onClick={() => handleDelete(teamId, player.id)}
+										onClick={() => openConfirmDelete(teamId, player.id)}
+										// onClick={() => handleDelete(teamId, player.id)}
 									>
 										Delete
 									</button>

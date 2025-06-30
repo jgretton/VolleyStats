@@ -11,6 +11,11 @@ export const useClubStore = create<ClubStore>()(
 				id: "club-1",
 				name: "Lincoln Cannons",
 				teams: [],
+				players: [],
+				seasons: [],
+				teamMemberships: [],
+				matches: [],
+				matchStats: [],
 			},
 
 			addTeam: (teamName: string) => {
@@ -22,7 +27,6 @@ export const useClubStore = create<ClubStore>()(
 							{
 								id: crypto.randomUUID(),
 								name: teamName,
-								players: [],
 							},
 						],
 					},

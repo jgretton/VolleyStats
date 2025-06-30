@@ -1,18 +1,11 @@
-✔ delete players from teams @done(25-06-24 13:04)
-✔ add edit feature to team names and player information @done(25-06-26 09:00)
-    ✔ Move pplayerlist modal to a seperate component called EditPlayerForm. @done(25-06-25 12:45)
-    ✔ add updatePlayer to zustand. @done(25-06-25 12:45)
-    ✔ update Team name @done(25-06-26 09:00)
+Updating data:
+    ☐ Updated Types
+    ☐ Update CRUD for Teams
+    ☐ Update CRUD for players
 
-
-☐ UI/UX
-    - dashboard layout
-    ☐ make dropdown menu - <details> and <summary>
-    - Tabs
-        - Team Management
-        - Match Management
-        - 
-
+    ☐ Update UI/UX for Teams
+    ☐ Update UI/UX for Players
+    
 
 
 Error Handling:
@@ -22,7 +15,3 @@ Error Handling:
 ☐ creating a match
     ☐ Add players to match
     ☐ select starting lineup
-
-
-    TODO:
-        ☐ Add player form, number is throwin error due to going from undefined to number.
