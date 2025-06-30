@@ -44,9 +44,9 @@ const Modal = ({
 
 				<button
 					onClick={closeModal}
-					className="mt-4 px-4 py-2 bg-gray-400 text-black rounded cursor-pointer"
+					className="mt-4 px-4 py-2 border hover:bg-gray-200 border-gray-200 bg-white text-black rounded cursor-pointer w-full"
 				>
-					Close Modal
+					Cancel
 				</button>
 			</div>
 		</dialog>
