@@ -10,6 +10,7 @@ interface ButtonProps {
 	type?: "submit" | "button";
 	disabled?: boolean;
 	className?: string;
+	icon?: boolean;
 }
 
 export const Button = ({
@@ -20,6 +21,7 @@ export const Button = ({
 	type = "button",
 	disabled = false,
 	className = "",
+	icon = true,
 }: ButtonProps) => {
 	const baseClasses =
 		"inline-flex items-center gap-2 font-medium rounded-lg transition-all duration-200 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed";
@@ -47,11 +49,13 @@ export const Button = ({
 			type={type}
 			className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
 		>
-			{isDelete ? (
-				<TrashIcon className="size-6" />
-			) : (
-				<PlusIcon className="size-6" />
-			)}
+			{icon ? (
+				isDelete ? (
+					<TrashIcon className="size-6" />
+				) : (
+					<PlusIcon className="size-6" />
+				)
+			) : null}
 			{children}
 		</button>
 	);

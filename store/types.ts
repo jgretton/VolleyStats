@@ -97,7 +97,12 @@ export interface Club {
 
 export interface ClubStore {
 	club: Club;
+
 	createSeason: (seasonName: string) => void;
+	removeSeason: (seasonId: string) => void;
+	updateSeasonName: (seasonName: string, seasonId: string) => void;
+	setCurrentSeason: (seasonId: string) => void;
+
 	calculateMatchesPerSeason: (seasonId: string) => number;
 	calculatePlayersPerSeason: (seasonId: string) => number;
 

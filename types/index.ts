@@ -15,14 +15,20 @@ export type ModalType =
 	| "addPlayer"
 	| "editTeam"
 	| "addTeam"
-	| "addSeason";
+	| "addSeason"
+	| "editSeason"
+	| "setCurrentSeason";
+
 export type ModalData =
 	| { type: "editPlayer"; player: Player; teamId: string }
 	| { type: "addPlayer"; teamId: string }
 	| { type: "editTeam"; team: Team }
 	| { type: "addTeam"; data: null }
-	| { type: "addSeason"; seasonName: string }
+	| { type: "addSeason"; data: null }
+	| { type: "editSeason"; seasonId: string }
+	| { type: "setCurrentSeason"; seasonId: string }
 	| null;
+
 export interface ModalState {
 	isOpen: boolean;
 	type: ModalType | null;
@@ -31,5 +37,6 @@ export interface ModalState {
 		| Team
 		| { teamId: string }
 		| { player: Player; teamId: string }
+		| { seasonId: string }
 		| null;
 }

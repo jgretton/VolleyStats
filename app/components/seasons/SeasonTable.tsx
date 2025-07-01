@@ -5,10 +5,24 @@ import { Season } from "@/store/types";
 import React from "react";
 import { ActiveTag } from "./activeTag";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useAppModal } from "@/hooks/useAppModal";
+import { AppModal } from "../modal/AppModal";
 
 export const SeasonTable = ({ seasonData }: { seasonData: Season[] }) => {
-	const { calculateMatchesPerSeason, calculatePlayersPerSeason, club } =
-		useClubStore((state) => state);
+	const {
+		isOpen,
+		modalData,
+		modalType,
+		closeModal,
+		openEditSeason,
+		openSetCurrentSeason,
+	} = useAppModal();
+	const {
+		calculateMatchesPerSeason,
+		calculatePlayersPerSeason,
+		club,
+		removeSeason,
+	} = useClubStore((state) => state);
 
 	if (seasonData.length === 0) {
 		return (
@@ -91,6 +105,7 @@ export const SeasonTable = ({ seasonData }: { seasonData: Season[] }) => {
 												className="text-blue-600 hover:text-blue-700 text-sm font-medium cursor-pointer"
 												onClick={() => {
 													/* Set as current */
+													openSetCurrentSeason(season.id);
 												}}
 											>
 												Set Current
@@ -100,6 +115,7 @@ export const SeasonTable = ({ seasonData }: { seasonData: Season[] }) => {
 											className="text-gray-500 hover:text-gray-700 transition-colors duration-200 cursor-pointer"
 											onClick={() => {
 												/* Edit season */
+												openEditSeason(season.id);
 											}}
 										>
 											<PencilIcon className="size-5" />
@@ -108,6 +124,7 @@ export const SeasonTable = ({ seasonData }: { seasonData: Season[] }) => {
 											className="text-red-500 hover:text-red-700 transition-colors duration-200 cursor-pointer"
 											onClick={() => {
 												/* Delete season */
+												removeSeason(season.id);
 											}}
 										>
 											<TrashIcon className="size-5" />
@@ -119,6 +136,13 @@ export const SeasonTable = ({ seasonData }: { seasonData: Season[] }) => {
 					})}
 				</tbody>
 			</table>
+
+			<AppModal
+				isOpen={isOpen}
+				modalData={modalData}
+				modalType={modalType}
+				closeModal={closeModal}
+			/>
 		</div>
 	);
 };

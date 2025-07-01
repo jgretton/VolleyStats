@@ -5,6 +5,8 @@ import EditPlayerForm from "../forms/EditPlayerForm";
 import { AddTeamForm } from "../forms/AddTeamForm";
 import { EditTeamForms } from "../forms/EditTeamForms";
 import { AddSeasonForm } from "../forms/AddSeasonForm";
+import { EditSeasonForm } from "../forms/EditSeasonForm";
+import { SetCurrentSeason } from "../seasons/SetCurrentSeason";
 
 interface AppModalProps {
 	isOpen: boolean;
@@ -36,7 +38,15 @@ export const AppModal = ({
 			case "editTeam":
 				return <EditTeamForms team={modalData} onSave={closeModal} />;
 			case "addSeason":
-				return <AddSeasonForm seasonName={modalData} onSave={closeModal} />;
+				return <AddSeasonForm onSave={closeModal} />;
+			case "editSeason":
+				return (
+					<EditSeasonForm seasonId={modalData.seasonId} onSave={closeModal} />
+				);
+			case "setCurrentSeason":
+				return (
+					<SetCurrentSeason seasonId={modalData.seasonId} onSave={closeModal} />
+				);
 			default:
 				return null;
 		}
@@ -54,6 +64,8 @@ export const AppModal = ({
 				return "Edit Team";
 			case "addSeason":
 				return "Create Season";
+			case "setCurrentSeason":
+				return "Are you sure you want to set this as the current season?";
 			default:
 				return "";
 		}

@@ -29,6 +29,45 @@ export const useClubStore = create<ClubStore>()(
 					},
 				}));
 			},
+			removeSeason: (seasonId: string) => {
+				const currentState = get();
+				const hasMatches = currentState.club.matches.some(
+					(match) => match.seasonId === seasonId
+				);
+				const hasMemberships = currentState.club.teamMemberships.some(
+					(membership) => membership.seasonId === seasonId
+				);
+				const isCurrentSeason = currentState.club.currentSeasonId === seasonId;
+
+				if (hasMatches || hasMemberships) {
+					throw new Error("Cannot delete season with existing data");
+				} else if (isCurrentSeason) {
+					throw new Error("Cannot delete season as this is the current seaon");
+				} else {
+					set((state) => ({
+						club: {
+							...state.club,
+							seasons: currentState.club.seasons.filter(
+								(season) => season.id !== seasonId
+							),
+						},
+					}));
+				}
+			},
+			updateSeasonName: (seasonName: string, seasonId: string) => {
+				const currentState = get();
+				const currentSeason = currentState.club.seasons.find(
+					(season) => season.id === seasonId
+				);
+
+				console.log(currentSeason);
+			},
+			setCurrentSeason: (seasonId: string) => {
+				console.log(seasonId);
+				set((state) => ({
+					club: { ...state.club, currentSeasonId: seasonId },
+				}));
+			},
 			calculateMatchesPerSeason: (seasonId: string) => {
 				const currentState = get();
 				const matches = currentState.club.matches.filter(

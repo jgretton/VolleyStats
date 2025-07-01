@@ -27,8 +27,22 @@ export const useAppModal = () => {
 	const openAddTeam = (): void => {
 		setModalState({ isOpen: true, type: "addTeam", data: null });
 	};
-	const openAddSeason = (): void => {
+	const openAddSeason = () => {
 		setModalState({ isOpen: true, type: "addSeason", data: null });
+	};
+	const openEditSeason = (seasonId: string) => {
+		setModalState({
+			isOpen: true,
+			type: "editSeason",
+			data: { seasonId },
+		});
+	};
+	const openSetCurrentSeason = (seasonId: string) => {
+		setModalState({
+			isOpen: true,
+			type: "setCurrentSeason",
+			data: { seasonId },
+		});
 	};
 
 	return {
@@ -41,5 +55,7 @@ export const useAppModal = () => {
 		openEditTeam,
 		openAddTeam,
 		openAddSeason,
+		openEditSeason,
+		openSetCurrentSeason,
 	};
 };

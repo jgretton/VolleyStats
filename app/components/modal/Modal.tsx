@@ -39,7 +39,7 @@ const Modal = ({
 			className="max-w-lg backdrop:bg-gray-900/50 rounded-md w-full m-auto"
 		>
 			<div className="p-5 rounded-md w-full mx-auto bg-white">
-				<h2 className="font-bold capitalize text-lg">{title}</h2>
+				<h2 className="font-bold capitalize text-lg text-center">{title}</h2>
 				<div className="mt-4">{children}</div>
 
 				<button
