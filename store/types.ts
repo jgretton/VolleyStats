@@ -86,6 +86,7 @@ export interface Season {
 export interface Club {
 	id: string;
 	name: string;
+	currentSeasonId: string;
 	teams: Team[];
 	players: Player[];
 	seasons: Season[];
@@ -96,10 +97,12 @@ export interface Club {
 
 export interface ClubStore {
 	club: Club;
+	createSeason: (seasonName: string) => void;
 	addTeam: (teamName: string) => void;
 	removeTeam: (teamName: string) => void;
 	updateTeam: (teamId: string, teamName: string) => void;
 	getTeamById: (teamId: string) => Team | undefined;
+
 	addPlayerToTeam: (teamId: string, player: Omit<Player, "id">) => void;
 	getPlayersByTeamId: (teamId: string) => Player[];
 	removePlayerFromTeam: (teamId: string, playerId: string) => void;

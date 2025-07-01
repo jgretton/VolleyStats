@@ -17,7 +17,17 @@ export const useClubStore = create<ClubStore>()(
 				matches: [],
 				matchStats: [],
 			},
+			createSeason: (seasonName: string) => {
+				const newSeason = { id: crypto.randomUUID(), name: seasonName };
 
+				set((state) => ({
+					club: {
+						...state.club,
+						currentSeasonId: state.club.currentSeasonId || newSeason.id, // If current season id is empty, make this the current season.
+						seasons: [...state.club.seasons, newSeason],
+					},
+				}));
+			},
 			addTeam: (teamName: string) => {
 				set((state) => ({
 					club: {
@@ -52,41 +62,12 @@ export const useClubStore = create<ClubStore>()(
 				const currentState = get();
 				return currentState.club.teams.find((team) => team.id === teamId);
 			},
-			addPlayerToTeam: (teamId: string, player: Omit<Player, "id">) => {
-				const currentState = get();
-				const currentTeamIndex = currentState.club.teams.findIndex(
-					(team) => team.id === teamId
-				);
-
-				const newPlayer: Player = {
-					id: crypto.randomUUID(),
-					...player,
-				};
-
-				set((state) => {
-					const newTeams = [...state.club.teams];
-					newTeams[currentTeamIndex] = {
-						...newTeams[currentTeamIndex],
-						players: [...newTeams[currentTeamIndex].players, newPlayer],
-					};
-					return { club: { ...state.club, teams: newTeams } };
-				});
-
-				// set((state) => ({
-				// 	club: {
-				// 		...state.club,
-				// 		teams: state.club.teams.map((team) => {
-				// 			if (team.id === teamId) {
-				// 				return {
-				// 					...team,
-				// 					players: [...team.players, newPlayer],
-				// 				};
-				// 			} else {
-				// 				return team;
-				// 			}
-				// 		}),
-				// 	},
-				// }));
+			addPlayerToTeam: (
+				teamId?: string,
+				player: Omit<Player, "id">,
+				seasonId?: string
+			) => {
+				// create player. If team ID is provided then create team membership
 			},
 			getPlayersByTeamId: (teamId: string) => {
 				const currentState = get();
