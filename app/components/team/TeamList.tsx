@@ -46,7 +46,7 @@ const TeamList = () => {
 						/>
 					</div>
 				) : (
-					<div className="mt-10 grid grid-cols-2 gap-4">
+					<div className="mt-10 flex flex-wrap gap-10">
 						{teams.map((team: Team) => (
 							<TeamCard key={team.id} team={team} />
 						))}

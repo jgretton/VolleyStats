@@ -46,11 +46,6 @@ export const TeamCard = ({ team }: { team: Team }) => {
 				</details>
 			</div>
 			<div className="mt-3">
-				<p className="">
-					No of players :{" "}
-					<span className="font font-medium">{team.players.length}</span>
-				</p>
-
 				<div className="w-full text-right mt-10">
 					<Link className="text-right" href={`/teams/${team.id}`}>
 						View
