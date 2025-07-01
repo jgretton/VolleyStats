@@ -15,7 +15,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={`antialiased flex flex-row`}>
 				<AppSidebar />
-				<main className=" flex-1">{children}</main>
+				<main className=" flex-1 bg-white">{children}</main>
 			</body>
 		</html>
 	);
