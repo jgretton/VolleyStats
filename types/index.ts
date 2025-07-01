@@ -10,12 +10,18 @@ export const VOLLEYBALL_POSITIONS = {
 	LI: "Libero",
 } as const;
 
-export type ModalType = "editPlayer" | "addPlayer" | "editTeam" | "addTeam";
+export type ModalType =
+	| "editPlayer"
+	| "addPlayer"
+	| "editTeam"
+	| "addTeam"
+	| "addSeason";
 export type ModalData =
 	| { type: "editPlayer"; player: Player; teamId: string }
 	| { type: "addPlayer"; teamId: string }
 	| { type: "editTeam"; team: Team }
 	| { type: "addTeam"; data: null }
+	| { type: "addSeason"; seasonName: string }
 	| null;
 export interface ModalState {
 	isOpen: boolean;

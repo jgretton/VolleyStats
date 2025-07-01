@@ -10,6 +10,7 @@ export const useClubStore = create<ClubStore>()(
 			club: {
 				id: "club-1",
 				name: "Lincoln Cannons",
+				currentSeasonId: "",
 				teams: [],
 				players: [],
 				seasons: [],
@@ -28,6 +29,21 @@ export const useClubStore = create<ClubStore>()(
 					},
 				}));
 			},
+			calculateMatchesPerSeason: (seasonId: string) => {
+				const currentState = get();
+				const matches = currentState.club.matches.filter(
+					(season) => season.id === seasonId
+				);
+				return matches.length;
+			},
+			calculatePlayersPerSeason: (seasonId: string) => {
+				const currentState = get();
+				const players = currentState.club.players.filter(
+					(season) => season.id === seasonId
+				);
+				return players.length;
+			},
+
 			addTeam: (teamName: string) => {
 				set((state) => ({
 					club: {

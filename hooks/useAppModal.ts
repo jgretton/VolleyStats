@@ -27,6 +27,9 @@ export const useAppModal = () => {
 	const openAddTeam = (): void => {
 		setModalState({ isOpen: true, type: "addTeam", data: null });
 	};
+	const openAddSeason = (): void => {
+		setModalState({ isOpen: true, type: "addSeason", data: null });
+	};
 
 	return {
 		isOpen: modalState.isOpen,
@@ -37,5 +40,6 @@ export const useAppModal = () => {
 		openAddPlayer,
 		openEditTeam,
 		openAddTeam,
+		openAddSeason,
 	};
 };

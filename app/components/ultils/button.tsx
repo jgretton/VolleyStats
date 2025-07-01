@@ -4,9 +4,10 @@ import React from "react";
 
 interface ButtonProps {
 	children: React.ReactNode;
-	onClick: () => void;
+	onClick?: () => void;
 	variant?: "primary" | "secondary" | "delete";
 	size?: "sm" | "md" | "lg";
+	type?: "submit" | "button";
 	disabled?: boolean;
 	className?: string;
 }
@@ -16,6 +17,7 @@ export const Button = ({
 	onClick,
 	variant = "primary",
 	size = "md",
+	type = "button",
 	disabled = false,
 	className = "",
 }: ButtonProps) => {
@@ -42,6 +44,7 @@ export const Button = ({
 		<button
 			onClick={onClick}
 			disabled={disabled}
+			type={type}
 			className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
 		>
 			{isDelete ? (

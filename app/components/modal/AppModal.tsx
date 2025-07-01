@@ -4,6 +4,7 @@ import { AddPlayerForm } from "../forms/AddPlayerForm";
 import EditPlayerForm from "../forms/EditPlayerForm";
 import { AddTeamForm } from "../forms/AddTeamForm";
 import { EditTeamForms } from "../forms/EditTeamForms";
+import { AddSeasonForm } from "../forms/AddSeasonForm";
 
 interface AppModalProps {
 	isOpen: boolean;
@@ -34,6 +35,8 @@ export const AppModal = ({
 				return <AddTeamForm onSave={closeModal} />;
 			case "editTeam":
 				return <EditTeamForms team={modalData} onSave={closeModal} />;
+			case "addSeason":
+				return <AddSeasonForm seasonName={modalData} onSave={closeModal} />;
 			default:
 				return null;
 		}
@@ -49,6 +52,8 @@ export const AppModal = ({
 				return "Add Team";
 			case "editTeam":
 				return "Edit Team";
+			case "addSeason":
+				return "Create Season";
 			default:
 				return "";
 		}
