@@ -4,21 +4,18 @@ import React from "react";
 import { useClubStore } from "@/store";
 import { useAppModal } from "@/hooks/useAppModal";
 import { AppModal } from "../modal/AppModal";
-import { Team } from "@/store/types";
 import { TeamCard } from "../cards/TeamCard";
 
 const TeamList = () => {
 	const { isOpen, modalData, modalType, closeModal, openAddTeam } =
 		useAppModal();
 	const teams = useClubStore((state) => state.club.teams);
-	const clubName = useClubStore((state) => state.club.name);
 
 	if (!teams) {
 		return <div>No Teams</div>;
 	} else
 		return (
 			<div className="size-full">
-				<div className="mt-10"></div>
 				{teams?.length === 0 ? (
 					<div className="grid mt-10 gap-10">
 						You havent added any teams, would you like to?
