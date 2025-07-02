@@ -66,7 +66,7 @@ export const AppSidebar = () => {
 	const clubName = useClubStore((state) => state.club);
 
 	return (
-		<div className="min-h-screen h-full border-r border-gray-200 bg-gray-50 px-4">
+		<div className="min-h-screen h-full border-r border-gray-200 bg-gray-50 px-4 min-w-fit">
 			<div className="pt-8">
 				<Link
 					className="hover:underline font-bold text-xl text-gray-900 block mb-12"
