@@ -93,6 +93,17 @@ export const useClubStore = create<ClubStore>()(
 					return isMember && matchesSeason && membership.isActive;
 				}).length;
 			},
+			calculateMatchesPerTeam: (teamId: string) => {
+				const currentState = get();
+
+				return currentState.club.matches.filter((match) => {
+					const isTeamMatch = match.teamId === teamId;
+					const matchSeason =
+						currentState.club.currentSeasonId === match.seasonId;
+
+					return isTeamMatch && matchSeason;
+				}).length;
+			},
 			addTeamMembership: (
 				playerId: string,
 				teamId: string,
@@ -197,65 +208,6 @@ export const useClubStore = create<ClubStore>()(
 					);
 					const newTeam = [...state.club.teams];
 					newTeam[currentTeamIndex].name = teamName;
-					return { club: { ...state.club, teams: newTeam } };
-				});
-			},
-			getTeamById: (teamId: string) => {
-				const currentState = get();
-				return currentState.club.teams.find((team) => team.id === teamId);
-			},
-			addPlayerToTeam: (
-				teamId?: string,
-				player: Omit<Player, "id">,
-				seasonId?: string
-			) => {
-				// create player. If team ID is provided then create team membership
-			},
-			getPlayersByTeamId: (teamId: string) => {
-				const currentState = get();
-				const currentTeam = currentState.club.teams.find(
-					(team) => team.id === teamId
-				);
-				if (!currentTeam) return [];
-				return currentTeam.players;
-			},
-			removePlayerFromTeam: (teamId: string, playerId: string) => {
-				set((state) => {
-					const teamIndex = state.club.teams.findIndex(
-						(team) => team.id === teamId
-					);
-					if (teamIndex === -1) return state;
-
-					const newPlayerList = state.club.teams[teamIndex].players.filter(
-						(player) => player.id !== playerId
-					);
-
-					const teams = [...state.club.teams];
-					teams[teamIndex] = {
-						...teams[teamIndex],
-						players: newPlayerList,
-					};
-
-					return { club: { ...state.club, teams: teams } };
-				});
-			},
-			updatePlayer: (teamId: string, player: Player) => {
-				console.log(player);
-				set((state) => {
-					const currentTeamIndex = state.club.teams.findIndex(
-						(team) => team.id === teamId
-					);
-
-					const currentPlayerIndex = state.club.teams[
-						currentTeamIndex
-					].players.findIndex((p) => p.id === player.id);
-
-					const newTeam = [...state.club.teams];
-					const currentPlayers = [...newTeam[currentTeamIndex].players];
-
-					currentPlayers[currentPlayerIndex] = player;
-					newTeam[currentTeamIndex].players = [...currentPlayers];
-
 					return { club: { ...state.club, teams: newTeam } };
 				});
 			},

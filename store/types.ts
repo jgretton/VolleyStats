@@ -106,11 +106,11 @@ export interface ClubStore {
 	calculateMatchesPerSeason: (seasonId: string) => number;
 	calculatePlayersPerSeason: (seasonId: string) => number;
 	calculatePlayersPerTeam: (teamId: string) => number;
+	calculateMatchesPerTeam: (teamId: string) => number;
 
 	addTeam: (teamName: string) => void;
 	removeTeam: (teamName: string) => void;
 	updateTeam: (teamId: string, teamName: string) => void;
-	getTeamById: (teamId: string) => Team | undefined;
 
 	addPlayer: (player: Omit<Player, "id">, teamId?: string) => void;
 	getPlayerTeams: (playerId: string, seasonId?: string) => string[];
@@ -121,10 +121,7 @@ export interface ClubStore {
 		seasonId: string
 	) => void;
 
-	addPlayerToTeam: (teamId: string, player: Omit<Player, "id">) => void;
-	getPlayersByTeamId: (teamId: string) => Player[];
-	removePlayerFromTeam: (teamId: string, playerId: string) => void;
-	updatePlayer: (teamId: string, player: Player) => void;
+	// need to remove.
 }
 
 // type VolleyballPosition = "OH" | "S" | "OP" | "MB" | "LI";
