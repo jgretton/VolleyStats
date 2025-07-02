@@ -196,10 +196,22 @@ export const useClubStore = create<ClubStore>()(
 				}));
 			},
 			removeTeam: (teamId: string) => {
-				set((state) => {
-					const newClub = state.club.teams.filter((team) => team.id !== teamId);
-					return { club: { ...state.club, teams: newClub } };
-				});
+				const currentState = get();
+				const hasMembership = currentState.club.teamMemberships.find(
+					(team) => team.teamId === teamId
+				);
+				if (hasMembership) {
+					throw new Error(
+						`This team cannot be deleted as it has data associated with it - ${hasMembership}`
+					);
+				} else {
+					set((state) => ({
+						club: {
+							...state.club,
+							teams: state.club.teams.filter((team) => team.id !== teamId),
+						},
+					}));
+				}
 			},
 			updateTeam: (teamId: string, teamName: string) => {
 				set((state) => {

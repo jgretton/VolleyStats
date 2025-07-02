@@ -10,7 +10,8 @@ type updatedTeamData = Team & { totalPlayers: number; totalMatches: number };
 const TeamTable = ({ teams }: { teams: Team[] }) => {
 	const { isOpen, modalData, modalType, closeModal } = useAppModal();
 
-	const { calculatePlayersPerTeam, calculateMatchesPerTeam } = useClubStore();
+	const { calculatePlayersPerTeam, calculateMatchesPerTeam, removeTeam } =
+		useClubStore();
 
 	const updatedTeamData: updatedTeamData[] = teams.map((team: Team) => ({
 		...team,
@@ -85,6 +86,7 @@ const TeamTable = ({ teams }: { teams: Team[] }) => {
 											className="text-red-500 hover:text-red-700 transition-colors duration-200 cursor-pointer"
 											onClick={() => {
 												/* Delete season */
+												removeTeam(team.id);
 											}}
 										>
 											<TrashIcon className="size-5" />
