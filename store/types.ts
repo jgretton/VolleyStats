@@ -105,6 +105,7 @@ export interface ClubStore {
 
 	calculateMatchesPerSeason: (seasonId: string) => number;
 	calculatePlayersPerSeason: (seasonId: string) => number;
+	calculatePlayersPerTeam: (teamId: string) => number;
 
 	addTeam: (teamName: string) => void;
 	removeTeam: (teamName: string) => void;

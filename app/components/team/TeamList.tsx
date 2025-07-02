@@ -6,6 +6,7 @@ import { useAppModal } from "@/hooks/useAppModal";
 import { AppModal } from "../modal/AppModal";
 import { Team } from "@/store/types";
 import { TeamCard } from "../cards/TeamCard";
+
 const TeamList = () => {
 	const { isOpen, modalData, modalType, closeModal, openAddTeam } =
 		useAppModal();
@@ -46,8 +47,8 @@ const TeamList = () => {
 						/>
 					</div>
 				) : (
-					<div className="mt-10 flex flex-wrap gap-10">
-						{teams.map((team: Team) => (
+					<div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+						{teams.map((team) => (
 							<TeamCard key={team.id} team={team} />
 						))}
 					</div>

@@ -16,8 +16,6 @@ const Page = () => {
 	const handleAddPlayer = () => {
 		openAddPlayer();
 	};
-	console.log(club.players);
-	console.log(club.teamMemberships);
 
 	return (
 		<PageLayout

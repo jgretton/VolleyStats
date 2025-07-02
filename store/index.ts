@@ -82,6 +82,17 @@ export const useClubStore = create<ClubStore>()(
 				);
 				return players.length;
 			},
+			calculatePlayersPerTeam: (teamId: string) => {
+				const currentState = get();
+
+				return currentState.club.teamMemberships.filter((membership) => {
+					const isMember = membership.teamId === teamId;
+					const matchesSeason =
+						currentState.club.currentSeasonId === membership.seasonId;
+
+					return isMember && matchesSeason && membership.isActive;
+				}).length;
+			},
 			addTeamMembership: (
 				playerId: string,
 				teamId: string,
