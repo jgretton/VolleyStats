@@ -8,21 +8,17 @@ import { useClubStore } from "@/store";
 
 const defaultPlayerObject = {
 	name: "",
-	position: "",
+	position: [],
 	number: undefined,
+	isActive: false,
 };
 
-export const AddPlayerForm = ({
-	teamId,
-	onSave,
-}: {
-	teamId: string;
-	onSave: () => void;
-}) => {
+export const AddPlayerForm = ({ onSave }: { onSave: () => void }) => {
 	const [playerDetails, setPlayerDetails] =
 		useState<Omit<Player, "id">>(defaultPlayerObject);
+	const [teamId, setTeamId] = useState<string>("");
 
-	const addPlayer = useClubStore((state) => state.addPlayerToTeam);
+	const { club, addPlayer } = useClubStore();
 
 	const handleOnChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -47,11 +43,10 @@ export const AddPlayerForm = ({
 			return;
 		}
 
-		addPlayer(teamId, playerDetails);
+		addPlayer(playerDetails, teamId);
 		setPlayerDetails(defaultPlayerObject);
 		onSave();
 	};
-
 	return (
 		<form onSubmit={(e) => onFormSubmit(e)} className="grid gap-4">
 			<label
@@ -64,6 +59,7 @@ export const AddPlayerForm = ({
 						type="text"
 						name="name"
 						id="name"
+						placeholder="John Smith"
 						value={playerDetails.name}
 						onChange={(e) => handleOnChange(e)}
 						className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -80,6 +76,7 @@ export const AddPlayerForm = ({
 						type="number"
 						name="number"
 						id="number"
+						placeholder="1-99"
 						min={1}
 						max={99}
 						value={playerDetails.number ?? ""}
@@ -109,7 +106,38 @@ export const AddPlayerForm = ({
 						))}
 					</select>
 				</div>
+				<span className="text-xs text-gray-500 font-light">
+					You can select multiple
+				</span>
 			</label>
+			{club.teams.length === 0 ? null : (
+				<label
+					htmlFor="position"
+					className="block text-sm font-medium text-gray-900"
+				>
+					Team
+					<br />
+					<div className="mt-2">
+						<select
+							name="position"
+							id="position"
+							value={teamId}
+							onChange={(e) => setTeamId(e.target.value)}
+							className="col-start-1 row-start-1 w-full rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+						>
+							<option value="">Select team...</option>
+							{club.teams.map((team) => (
+								<option key={team.id} value={team.id}>
+									{team.name}
+								</option>
+							))}
+						</select>
+					</div>
+					<span className="text-xs text-gray-500 font-light">
+						This doesn&aspos;t have to be assigned right now.
+					</span>
+				</label>
+			)}
 
 			<button
 				type="submit"

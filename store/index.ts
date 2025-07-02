@@ -82,6 +82,82 @@ export const useClubStore = create<ClubStore>()(
 				);
 				return players.length;
 			},
+			addTeamMembership: (
+				playerId: string,
+				teamId: string,
+				seasonId: string
+			) => {
+				const newMembership = {
+					id: crypto.randomUUID(),
+					playerId,
+					teamId,
+					seasonId,
+					isActive: true,
+				};
+
+				set((state) => ({
+					club: {
+						...state.club,
+						teamMemberships: [...state.club.teamMemberships, newMembership],
+					},
+				}));
+			},
+			addPlayer: (player: Omit<Player, "id">, teamId?: string) => {
+				const currentState = get();
+
+				//checking if teamid was an empty string
+				const validTeamId = teamId?.trim() || undefined;
+
+				if (validTeamId && !currentState.club.currentSeasonId) {
+					throw new Error("No active season. Please create a season first.");
+				}
+
+				const newPlayer = {
+					id: crypto.randomUUID(),
+					name: player.name,
+					number: player.number,
+					position: player.position,
+					isActive: !!validTeamId,
+				};
+
+				set((state) => ({
+					club: {
+						...state.club,
+						players: [...state.club.players, newPlayer],
+					},
+				}));
+				if (validTeamId) {
+					const { addTeamMembership } = useClubStore.getState();
+
+					addTeamMembership(
+						newPlayer.id,
+						validTeamId,
+						currentState.club.currentSeasonId
+					);
+				}
+			},
+			getPlayerTeams: (playerId: string, seasonId?: string) => {
+				const currentState = get();
+				// returns all players with matching ID and is Active. SeasonID is there incase later i want to filter using a current or previous season.
+				const playerMemberships = currentState.club.teamMemberships.filter(
+					(membership) => {
+						const matchesPlayer = membership.playerId === playerId;
+						const matchesSeason = seasonId
+							? membership.seasonId === seasonId
+							: true;
+						return matchesPlayer && matchesSeason && membership.isActive;
+					}
+				);
+
+				return playerMemberships
+					.map((membership) => {
+						const team = currentState.club.teams.find(
+							(team) => team.id === membership.teamId
+						);
+						return team?.name || "";
+					})
+					.filter((name) => name !== "");
+			},
 
 			addTeam: (teamName: string) => {
 				set((state) => ({

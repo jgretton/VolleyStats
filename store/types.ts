@@ -111,6 +111,15 @@ export interface ClubStore {
 	updateTeam: (teamId: string, teamName: string) => void;
 	getTeamById: (teamId: string) => Team | undefined;
 
+	addPlayer: (player: Omit<Player, "id">, teamId?: string) => void;
+	getPlayerTeams: (playerId: string, seasonId?: string) => string[];
+
+	addTeamMembership: (
+		playerId: string,
+		teamId: string,
+		seasonId: string
+	) => void;
+
 	addPlayerToTeam: (teamId: string, player: Omit<Player, "id">) => void;
 	getPlayersByTeamId: (teamId: string) => Player[];
 	removePlayerFromTeam: (teamId: string, playerId: string) => void;

@@ -3,7 +3,7 @@
 import { useClubStore } from "@/store";
 import { Season } from "@/store/types";
 import React from "react";
-import { ActiveTag } from "./activeTag";
+import { ActiveTag } from "../ultils/activeTag";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useAppModal } from "@/hooks/useAppModal";
 import { AppModal } from "../modal/AppModal";
@@ -96,7 +96,9 @@ export const SeasonTable = ({ seasonData }: { seasonData: Season[] }) => {
 									</div>
 								</td>
 								<td className="px-6 py-4 whitespace-nowrap text-center">
-									<ActiveTag isActive={isCurrentSeason} />
+									<ActiveTag isActive={isCurrentSeason}>
+										{isCurrentSeason ? "Current" : "Past"}
+									</ActiveTag>
 								</td>
 								<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 									<div className="flex items-center justify-end gap-2">

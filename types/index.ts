@@ -21,7 +21,7 @@ export type ModalType =
 
 export type ModalData =
 	| { type: "editPlayer"; player: Player; teamId: string }
-	| { type: "addPlayer"; teamId: string }
+	| { type: "addPlayer" }
 	| { type: "editTeam"; team: Team }
 	| { type: "addTeam"; data: null }
 	| { type: "addSeason"; data: null }

@@ -18,8 +18,8 @@ export const useAppModal = () => {
 			data: { player: player, teamId: teamId },
 		});
 	};
-	const openAddPlayer = (teamId: string): void => {
-		setModalState({ isOpen: true, type: "addPlayer", data: { teamId } });
+	const openAddPlayer = (): void => {
+		setModalState({ isOpen: true, type: "addPlayer", data: null });
 	};
 	const openEditTeam = (team: Team): void => {
 		setModalState({ isOpen: true, type: "editTeam", data: team });

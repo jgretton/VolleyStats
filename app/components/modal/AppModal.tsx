@@ -32,7 +32,7 @@ export const AppModal = ({
 					/>
 				);
 			case "addPlayer":
-				return <AddPlayerForm teamId={modalData.teamId} onSave={closeModal} />;
+				return <AddPlayerForm onSave={closeModal} />;
 			case "addTeam":
 				return <AddTeamForm onSave={closeModal} />;
 			case "editTeam":
