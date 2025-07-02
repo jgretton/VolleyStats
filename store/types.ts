@@ -20,9 +20,9 @@ export interface Match {
 	date: string;
 	selectedPlayers: string[];
 	status: "upcoming" | "in-progress" | "completed" | "cancelled";
-	teamScore: number;
-	opponentScore: number;
-	setScores: SetScore[];
+	teamScore?: number;
+	opponentScore?: number;
+	setScores?: SetScore[];
 }
 export interface MatchStats {
 	id: string;
@@ -114,6 +114,8 @@ export interface ClubStore {
 
 	addPlayer: (player: Omit<Player, "id">, teamId?: string) => void;
 	getPlayerTeams: (playerId: string, seasonId?: string) => string[];
+
+	createMatch: (match: Omit<Match, "id" | "seasonId">) => void;
 
 	addTeamMembership: (
 		playerId: string,

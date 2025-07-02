@@ -44,6 +44,9 @@ export const useAppModal = () => {
 			data: { seasonId },
 		});
 	};
+	const openCreateMatch = () => {
+		setModalState({ isOpen: true, type: "createMatch", data: null });
+	};
 
 	return {
 		isOpen: modalState.isOpen,
@@ -57,5 +60,6 @@ export const useAppModal = () => {
 		openAddSeason,
 		openEditSeason,
 		openSetCurrentSeason,
+		openCreateMatch,
 	};
 };

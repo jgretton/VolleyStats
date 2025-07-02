@@ -17,7 +17,8 @@ export type ModalType =
 	| "addTeam"
 	| "addSeason"
 	| "editSeason"
-	| "setCurrentSeason";
+	| "setCurrentSeason"
+	| "createMatch";
 
 export type ModalData =
 	| { type: "editPlayer"; player: Player; teamId: string }
@@ -27,6 +28,7 @@ export type ModalData =
 	| { type: "addSeason"; data: null }
 	| { type: "editSeason"; seasonId: string }
 	| { type: "setCurrentSeason"; seasonId: string }
+	| { type: "createMatch"; data: null }
 	| null;
 
 export interface ModalState {

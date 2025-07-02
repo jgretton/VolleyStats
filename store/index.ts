@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { ClubStore, Player } from "./types";
+import { ClubStore, Match, Player } from "./types";
 
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -158,6 +158,7 @@ export const useClubStore = create<ClubStore>()(
 					);
 				}
 			},
+			// Returns the team name for the player provided.
 			getPlayerTeams: (playerId: string, seasonId?: string) => {
 				const currentState = get();
 				// returns all players with matching ID and is Active. SeasonID is there incase later i want to filter using a current or previous season.
@@ -180,7 +181,30 @@ export const useClubStore = create<ClubStore>()(
 					})
 					.filter((name) => name !== "");
 			},
+			getActivePlayersByTeamId: (teamId: string) => {
+				const currentState = get();
 
+				//find all players that play for the team matching the teamId this current season
+				const playerMemberships = currentState.club.teamMemberships.filter(
+					(team) => {
+						const matchingTeamId = team.teamId === teamId;
+						const matchingSeason =
+							team.seasonId === currentState.club.currentSeasonId;
+
+						return matchingTeamId && matchingSeason && team.isActive;
+					}
+				);
+
+				//Map through the playerMemberships and get the players information;
+				//Remove any undefined players.
+				return playerMemberships
+					.map((player) => {
+						return currentState.club.players.find(
+							(p) => p.id === player.playerId
+						);
+					})
+					.filter((player) => player !== undefined);
+			},
 			addTeam: (teamName: string) => {
 				set((state) => ({
 					club: {
@@ -222,6 +246,27 @@ export const useClubStore = create<ClubStore>()(
 					newTeam[currentTeamIndex].name = teamName;
 					return { club: { ...state.club, teams: newTeam } };
 				});
+			},
+			createMatch: (match: Omit<Match, "id" | "seasonId">) => {
+				const currentState = get();
+
+				if (!currentState.club.currentSeasonId) {
+					throw new Error("No active season. Please create a season first.");
+				}
+
+				const newMatch: Match = {
+					id: crypto.randomUUID(),
+					teamId: match.teamId,
+					seasonId: currentState.club.currentSeasonId,
+					opponent: match.opponent,
+					date: match.date,
+					selectedPlayers: match.selectedPlayers,
+					status: match.status || "upcoming",
+				};
+
+				set((state) => ({
+					club: { ...state.club, matches: [...state.club.matches, newMatch] },
+				}));
 			},
 		}),
 		{
