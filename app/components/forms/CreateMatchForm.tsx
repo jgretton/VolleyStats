@@ -12,6 +12,7 @@ const default_match: Omit<Match, "id" | "seasonId"> = {
 	date: "",
 	selectedPlayers: [],
 	status: "upcoming",
+	venue: "home",
 };
 
 type PlayerSelection = {
@@ -26,6 +27,11 @@ const CreateMatchForm = ({ onSave }: { onSave: () => void }) => {
 
 	const { club, getActivePlayersByTeamId, createMatch } = useClubStore();
 	const { teams } = club;
+
+	const teamOptions = teams.map((team: Team) => ({
+		label: team.name,
+		value: team.id,
+	}));
 
 	//if team has not been selected - cannt select players
 	//once team selected - show players for that team.
@@ -97,20 +103,22 @@ const CreateMatchForm = ({ onSave }: { onSave: () => void }) => {
 			>
 				Your Team
 				<div className="mt-2">
-					<select
+					<Select
 						name="teamId"
-						id="teamId"
-						value={formData.teamId}
-						onChange={(e) => handleOnChange(e)}
-						className="col-start-1 row-start-1 w-full rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-					>
-						<option value="">Select Team...</option>
-						{teams.map((team: Team) => (
-							<option key={team.id} value={team.id}>
-								{team.name}
-							</option>
-						))}
-					</select>
+						placeholder="Select Team..."
+						value={
+							teamOptions.find((option) => option.value === formData.teamId) ||
+							null
+						}
+						onChange={(selectedOption) => {
+							setFormData((prevState) => ({
+								...prevState,
+								teamId: selectedOption?.value || "",
+							}));
+						}}
+						options={teamOptions}
+						isClearable
+					/>
 				</div>
 			</label>
 
@@ -127,7 +135,7 @@ const CreateMatchForm = ({ onSave }: { onSave: () => void }) => {
 						placeholder="Nottingham Rockets"
 						value={formData.opponent}
 						onChange={(e) => handleOnChange(e)}
-						className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+						className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
 					/>
 				</div>
 			</label>
@@ -144,10 +152,45 @@ const CreateMatchForm = ({ onSave }: { onSave: () => void }) => {
 						id="date"
 						value={formData.date}
 						onChange={(e) => handleOnChange(e)}
-						className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+						className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
 					/>
 				</div>
 			</label>
+			<p className="block text-sm/6 font-medium text-gray-900">Venue</p>
+			<div className="grid grid-cols-2 gap-3">
+				<label
+					className={`cursor-pointer rounded-lg border p-2 text-center transition-colors ${
+						formData.venue === "home"
+							? "border-indigo-600 bg-indigo-50 text-indigo-600"
+							: "border-gray-200 hover:border-gray-300"
+					}`}
+				>
+					<input
+						type="radio"
+						name="venue"
+						value="home"
+						className="sr-only"
+						onChange={(e) => handleOnChange(e)}
+					/>
+					Home
+				</label>
+				<label
+					className={`cursor-pointer rounded-lg border p-2 text-center transition-colors ${
+						formData.venue === "away"
+							? "border-indigo-600 bg-indigo-50 text-indigo-600"
+							: "border-gray-200 hover:border-gray-300"
+					}`}
+				>
+					<input
+						type="radio"
+						name="venue"
+						value="away"
+						className="sr-only"
+						onChange={(e) => handleOnChange(e)}
+					/>
+					Away
+				</label>
+			</div>
 			<label
 				htmlFor="selectedPlayers"
 				className="block text-sm/6 font-medium text-gray-900"

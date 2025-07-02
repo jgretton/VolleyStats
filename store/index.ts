@@ -262,6 +262,7 @@ export const useClubStore = create<ClubStore>()(
 					date: match.date,
 					selectedPlayers: match.selectedPlayers,
 					status: match.status || "upcoming",
+					venue: match.venue,
 				};
 
 				set((state) => ({

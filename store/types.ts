@@ -18,6 +18,7 @@ export interface Match {
 	seasonId: string;
 	opponent: string;
 	date: string;
+	venue: "home" | "away";
 	selectedPlayers: string[];
 	status: "upcoming" | "in-progress" | "completed" | "cancelled";
 	teamScore?: number;
@@ -111,6 +112,7 @@ export interface ClubStore {
 	addTeam: (teamName: string) => void;
 	removeTeam: (teamName: string) => void;
 	updateTeam: (teamId: string, teamName: string) => void;
+	getActivePlayersByTeamId: (teamId: string) => Player[];
 
 	addPlayer: (player: Omit<Player, "id">, teamId?: string) => void;
 	getPlayerTeams: (playerId: string, seasonId?: string) => string[];
