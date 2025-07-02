@@ -24,7 +24,7 @@ const CreateMatchForm = ({ onSave }: { onSave: () => void }) => {
 		useState<Omit<Match, "id" | "seasonId">>(default_match);
 	const [playerSelection, setPlayerSelection] = useState<PlayerSelection[]>([]);
 
-	const { club, getActivePlayersByTeamId } = useClubStore();
+	const { club, getActivePlayersByTeamId, createMatch } = useClubStore();
 	const { teams } = club;
 
 	//if team has not been selected - cannt select players
@@ -47,6 +47,17 @@ const CreateMatchForm = ({ onSave }: { onSave: () => void }) => {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+
+		if (
+			!formData.teamId.trim() ||
+			!formData.opponent.trim() ||
+			!formData.date.trim()
+		) {
+			console.log("FILL OUT THE FORM");
+			return;
+		} else {
+			createMatch(formData);
+		}
 
 		onSave();
 	};
