@@ -123,12 +123,14 @@ export interface ClubStore {
 	removeTeam: (teamName: string) => void;
 	updateTeam: (teamId: string, teamName: string) => void;
 	getActivePlayersByTeamId: (teamId: string) => Player[];
+	getTeamById: (teamId: string) => Team;
 
 	addPlayer: (player: Omit<Player, "id">, teamId?: string) => void;
 	getPlayerTeams: (playerId: string, seasonId?: string) => string[];
 
 	createMatch: (match: Omit<Match, "id" | "seasonId">) => void;
 	getMatchesByTeamId: (teamId: string) => Match[];
+	getSingleMatch: (matchId: string) => Match;
 	getAllTeamMatches: () => MatchData[];
 
 	addTeamMembership: (

@@ -205,6 +205,7 @@ export const useClubStore = create<ClubStore>()(
 					})
 					.filter((player) => player !== undefined);
 			},
+
 			addTeam: (teamName: string) => {
 				set((state) => ({
 					club: {
@@ -246,6 +247,15 @@ export const useClubStore = create<ClubStore>()(
 					newTeam[currentTeamIndex].name = teamName;
 					return { club: { ...state.club, teams: newTeam } };
 				});
+			},
+			getTeamById: (teamId: string) => {
+				const currentState = get();
+				const team = currentState.club.teams.find((t) => t.id === teamId);
+				if (!team) {
+					throw new Error("No team was found with this ID");
+				} else {
+					return team;
+				}
 			},
 			createMatch: (match: Omit<Match, "id" | "seasonId">) => {
 				const currentState = get();
@@ -310,6 +320,16 @@ export const useClubStore = create<ClubStore>()(
 				});
 
 				return matchData;
+			},
+			getSingleMatch: (matchId: string) => {
+				const currentState = get();
+				const singleMatch = currentState.club.matches.find(
+					(match) => match.id === matchId
+				);
+
+				if (!singleMatch) {
+					throw new Error("There was no match with this id");
+				} else return singleMatch;
 			},
 		}),
 		{
