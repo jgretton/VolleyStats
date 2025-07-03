@@ -272,32 +272,41 @@ export const useClubStore = create<ClubStore>()(
 			getMatchesByTeamId: (teamId: string) => {
 				const currentState = get();
 				return currentState.club.matches.filter(
-					(match) => match.teamId === teamId
+					(match) =>
+						match.teamId === teamId &&
+						match.seasonId === currentState.club.currentSeasonId
 				);
 			},
 
 			getAllTeamMatches: () => {
 				const currentState = get();
 
+				if (currentState.club.matches.length < 1) return [];
+
 				const matchData: MatchData[] = [];
 
-				currentState.club.teams.forEach((team) =>
-					matchData.push({
-						teamId: team.id,
-						teamName: team.name,
-						upcoming: [],
-						completed: [],
-						inProgress: [],
-					})
-				);
-				matchData.forEach((team) => {
-					const matches: Match[] = currentState.getMatchesByTeamId(team.teamId);
+				currentState.club.teams.forEach((team) => {
+					const matches: Match[] = currentState.getMatchesByTeamId(team.id);
 
-					matches.forEach((match: Match) => {
-						if (match.status === "completed") team.completed.push(match);
-						if (match.status === "upcoming") team.upcoming.push(match);
-						if (match.status === "in-progress") team.inProgress.push(match);
-					});
+					// Only add team if it has matches
+					if (matches.length > 0) {
+						const teamData: MatchData = {
+							teamId: team.id,
+							teamName: team.name,
+							upcoming: [],
+							completed: [],
+							inProgress: [],
+						};
+
+						matches.forEach((match: Match) => {
+							if (match.status === "completed") teamData.completed.push(match);
+							if (match.status === "upcoming") teamData.upcoming.push(match);
+							if (match.status === "in-progress")
+								teamData.inProgress.push(match);
+						});
+
+						matchData.push(teamData);
+					}
 				});
 
 				return matchData;
@@ -306,6 +315,7 @@ export const useClubStore = create<ClubStore>()(
 		{
 			name: "Lincoln-cannons-club",
 			storage: createJSONStorage(() => localStorage),
+			partialize: (state) => ({ club: state.club }), // Ensure club is always persisted
 		}
 	)
 );
