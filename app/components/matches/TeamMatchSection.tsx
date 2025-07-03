@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import React from "react";
 import VenueBadge from "./VenueBadge";
+import FormatDate from "../ultils/FormatDate";
 
 const TeamMatchSection = ({ teamData }: { teamData: MatchData }) => {
 	const nextUpcoming = teamData.upcoming.sort(
@@ -47,26 +48,21 @@ const TeamMatchSection = ({ teamData }: { teamData: MatchData }) => {
 								<div className="inline-flex mt-2">
 									<span className="flex items-center gap-2 text-sm text-gray-600">
 										<CalendarIcon className="size-4" />
-										{new Date(nextUpcoming.date).toLocaleDateString("en-GB", {
-											weekday: "short",
-											day: "numeric",
-											month: "short",
-											year: "numeric",
-										})}
+										<FormatDate date={nextUpcoming.date} />
 									</span>
 								</div>
 							</div>
 
 							<div className="flex items-center gap-2">
 								<Link
-									href={"/stats"}
+									href={`/matches/${nextUpcoming.id}`}
 									className="inline-flex items-center gap-1.5 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm transition-colors cursor-pointer"
 								>
 									<EyeIcon className="size-4" />
 									View Match
 								</Link>
 								<Link
-									href={"/stats"}
+									href={`/matches/${nextUpcoming.id}/setup`}
 									className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer"
 								>
 									<Cog6ToothIcon className="size-4" />
