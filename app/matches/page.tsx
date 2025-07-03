@@ -22,7 +22,6 @@ const Page = () => {
 
 	const { club, getAllTeamMatches } = useClubStore();
 	const matches = getAllTeamMatches();
-	console.log(matches);
 
 	const hasSeason = club.currentSeasonId.trim();
 
