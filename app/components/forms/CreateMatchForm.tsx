@@ -219,9 +219,7 @@ const CreateMatchForm = ({ onSave }: { onSave: () => void }) => {
 				</div>
 			</label>
 			<div className="">
-				{formData.selectedPlayers.length < 1 ? (
-					<p>Select your match squad</p>
-				) : (
+				{formData.selectedPlayers.length >= 1 &&
 					formData.selectedPlayers.map((playerId) => {
 						// Find the player name from the options
 						const playerOption: PlayerSelection | undefined =
@@ -259,8 +257,7 @@ const CreateMatchForm = ({ onSave }: { onSave: () => void }) => {
 								</Button>
 							</div>
 						);
-					})
-				)}
+					})}
 			</div>
 			<Button type="submit" icon={false} className="w-full justify-center">
 				Create Match
