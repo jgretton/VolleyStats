@@ -1,15 +1,28 @@
 "use client";
 
 import { PageLayout } from "@/app/components/layouts/PageLayout";
+import { AppModal } from "@/app/components/modal/AppModal";
 import TeamTable from "@/app/components/team/TeamTable";
+import { Button } from "@/app/components/ultils/button";
+import { useAppModal } from "@/hooks/useAppModal";
 import { useClubStore } from "@/store";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
 const Page = () => {
 	const { club } = useClubStore();
+	const { isOpen, modalData, modalType, closeModal, openAddTeam } =
+		useAppModal();
 	return (
-		<PageLayout title="Team Management" subtitle="Manage your teams" actions>
+		<PageLayout
+			title="Team Management"
+			subtitle="Manage your teams"
+			actions={
+				<Button size="md" type="button" onClick={() => openAddTeam()}>
+					Add Team
+				</Button>
+			}
+		>
 			<div className="size-full">
 				{club.teams.length === 0 ? (
 					<div className="flex flex-col items-center justify-center py-16 text-center">
@@ -24,6 +37,13 @@ const Page = () => {
 					</div>
 				)}
 			</div>
+
+			<AppModal
+				isOpen={isOpen}
+				modalData={modalData}
+				modalType={modalType}
+				closeModal={closeModal}
+			/>
 		</PageLayout>
 	);
 };
