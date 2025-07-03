@@ -24,6 +24,7 @@ export interface Match {
 	teamScore?: number;
 	opponentScore?: number;
 	setScores?: SetScore[];
+	result?: "Won" | "Lost";
 }
 export interface MatchStats {
 	id: string;
@@ -66,6 +67,15 @@ export interface MatchStats {
 	settingErrors: number;
 	setAttempts: number;
 }
+
+export interface MatchData {
+	teamId: string;
+	teamName: string;
+	upcoming: Match[];
+	completed: Match[];
+	inProgress: Match[];
+}
+
 export interface TeamMembership {
 	id: string;
 	playerId: string;
@@ -118,6 +128,8 @@ export interface ClubStore {
 	getPlayerTeams: (playerId: string, seasonId?: string) => string[];
 
 	createMatch: (match: Omit<Match, "id" | "seasonId">) => void;
+	getMatchesByTeamId: (teamId: string) => Match[];
+	getAllTeamMatches: () => MatchData[];
 
 	addTeamMembership: (
 		playerId: string,

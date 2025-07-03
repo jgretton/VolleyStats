@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { ClubStore, Match, Player } from "./types";
+import { ClubStore, Match, MatchData, Player } from "./types";
 
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -268,6 +268,39 @@ export const useClubStore = create<ClubStore>()(
 				set((state) => ({
 					club: { ...state.club, matches: [...state.club.matches, newMatch] },
 				}));
+			},
+			getMatchesByTeamId: (teamId: string) => {
+				const currentState = get();
+				return currentState.club.matches.filter(
+					(match) => match.teamId === teamId
+				);
+			},
+
+			getAllTeamMatches: () => {
+				const currentState = get();
+
+				const matchData: MatchData[] = [];
+
+				currentState.club.teams.forEach((team) =>
+					matchData.push({
+						teamId: team.id,
+						teamName: team.name,
+						upcoming: [],
+						completed: [],
+						inProgress: [],
+					})
+				);
+				matchData.forEach((team) => {
+					const matches: Match[] = currentState.getMatchesByTeamId(team.teamId);
+
+					matches.forEach((match: Match) => {
+						if (match.status === "completed") team.completed.push(match);
+						if (match.status === "upcoming") team.upcoming.push(match);
+						if (match.status === "in-progress") team.inProgress.push(match);
+					});
+				});
+
+				return matchData;
 			},
 		}),
 		{
