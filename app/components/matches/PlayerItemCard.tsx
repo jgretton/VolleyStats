@@ -1,16 +1,12 @@
+import { Player } from "@/store/types";
 import React from "react";
-
-type PlayerData = {
-	id: string;
-	name: string;
-};
 
 const PlayerItemCard = ({
 	player,
 	action,
 	remove,
 }: {
-	player: PlayerData;
+	player: Player;
 	action: React.MouseEventHandler;
 	remove?: boolean;
 }) => {
@@ -23,7 +19,9 @@ const PlayerItemCard = ({
 			}`}
 			onClick={action}
 		>
-			<span className="text-sm font-medium">{player.name}</span>
+			<span className="text-sm font-medium">
+				{player.number} - {player.name}
+			</span>
 			{remove && <span className="text-red-500 text-xs">remove</span>}
 		</li>
 	);

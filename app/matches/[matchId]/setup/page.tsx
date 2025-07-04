@@ -2,40 +2,19 @@
 
 import MatchInfoCard from "@/app/components/cards/MatchInfoCard";
 import { PageLayout } from "@/app/components/layouts/PageLayout";
-import PlayerItemCard from "@/app/components/matches/PlayerItemCard";
+import SquadSelection from "@/app/components/matches/SquadSelection";
 import { useClubStore } from "@/store";
-import { Match } from "@/store/types";
+import { Match, Player } from "@/store/types";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
-
-const availablePlayers = [
-	{ id: "1", name: "James Wilson" },
-	{ id: "2", name: "Sarah Mitchell" },
-	{ id: "3", name: "Tom Rodriguez" },
-	{ id: "4", name: "Emma Thompson" },
-	{ id: "5", name: "Michael Chen" },
-	{ id: "6", name: "Lucy Roberts" },
-	{ id: "7", name: "David Kumar" },
-	{ id: "8", name: "Sophie Clarke" },
-	{ id: "9", name: "Alex Turner" },
-	{ id: "10", name: "Maya Patel" },
-	{ id: "11", name: "Ryan O'Connor" },
-	{ id: "12", name: "Zoe Anderson" },
-	{ id: "13", name: "Josh Campbell" },
-	{ id: "14", name: "Jimmy Campbell" },
-];
+import React from "react";
 
 const Page = () => {
-	const { getSingleMatch } = useClubStore();
+	const { getSingleMatch, getTeamPlayersByTeamId } = useClubStore();
 	const params = useParams();
 	const matchId = params.matchId as string;
 
 	const matchData: Match = getSingleMatch(matchId);
-	const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
-
-	const hasMinimumPlayers = selectedPlayers.length >= 6;
-	const isFullSquad = selectedPlayers.length === 13;
-	const playersNeeded = Math.max(0, 6 - selectedPlayers.length);
+	const availablePlayers: Player[] = getTeamPlayersByTeamId(matchData.teamId);
 
 	return (
 		<PageLayout
@@ -53,84 +32,7 @@ const Page = () => {
 							Please confirm the squad for this match
 						</p>
 
-						<div className=" grid grid-cols-2 w-full mt-5 divide-x divide-gray-200 ">
-							<div className="pr-4">
-								<h4 className="font-medium text-base">Available Players</h4>
-								<div className=" h-full overflow-y-scroll max-h-96 mt-4">
-									<ul className="flex flex-col gap-3">
-										{availablePlayers
-											.filter((player) => !selectedPlayers.includes(player.id))
-											.map((player) => (
-												<PlayerItemCard
-													action={() =>
-														setSelectedPlayers((prevState) => {
-															if (
-																prevState.includes(player.id) ||
-																prevState.length >= 13
-															) {
-																return prevState;
-															}
-															return [...prevState, player.id];
-														})
-													}
-													key={player.id}
-													player={player}
-												/>
-											))}
-									</ul>
-								</div>
-							</div>
-							<div className="pl-4">
-								<div className="flex justify-between items-center">
-									<h4 className="font-medium text-base">
-										Selected Players{" "}
-										<span className="tracking-wider text-sm">
-											({selectedPlayers.length}/13)
-										</span>
-									</h4>
-									{!hasMinimumPlayers && (
-										<span className="bg-yellow-100 rounded-lg px-1 py-2 text-xs text-yellow-700">
-											Select {playersNeeded} more
-										</span>
-									)}
-									{isFullSquad && (
-										<span className="bg-red-100 rounded-lg px-1 py-2 text-xs text-red-700">
-											Squad full
-										</span>
-									)}
-								</div>
-								<div className=" h-full overflow-y-scroll max-h-96 mt-4">
-									<ul className="flex flex-col gap-3 bg-gray-50 rounded-lg min-h-32 p-4">
-										{selectedPlayers.length === 0 ? (
-											<div className="flex size-full justify-center items-center">
-												<p className="text-sm text-gray-500 text-wrap text-center">
-													Select players from the left
-												</p>
-											</div>
-										) : (
-											selectedPlayers.map((playerId) => {
-												const player = availablePlayers.find(
-													(p) => p.id === playerId
-												);
-												if (!player) return null;
-												return (
-													<PlayerItemCard
-														action={() => {
-															setSelectedPlayers((prevState) =>
-																prevState.filter((p) => p !== playerId)
-															);
-														}}
-														key={player.id}
-														player={player}
-														remove
-													/>
-												);
-											})
-										)}
-									</ul>
-								</div>
-							</div>
-						</div>
+						<SquadSelection availablePlayers={availablePlayers} />
 					</div>
 				</div>
 			</div>
