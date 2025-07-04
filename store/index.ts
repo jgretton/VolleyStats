@@ -257,6 +257,23 @@ export const useClubStore = create<ClubStore>()(
 					return team;
 				}
 			},
+			getTeamPlayersByTeamId: (teamId: string) => {
+				const currentState = get();
+
+				return currentState.club.teamMemberships
+					.filter(
+						(member) =>
+							member.teamId === teamId &&
+							member.isActive &&
+							member.seasonId === currentState.club.currentSeasonId
+					)
+					.map((member) =>
+						currentState.club.players.find(
+							(player) => player.id === member.playerId
+						)
+					)
+					.filter((player) => player !== undefined);
+			},
 			createMatch: (match: Omit<Match, "id" | "seasonId">) => {
 				const currentState = get();
 

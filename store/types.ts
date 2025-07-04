@@ -124,7 +124,7 @@ export interface ClubStore {
 	updateTeam: (teamId: string, teamName: string) => void;
 	getActivePlayersByTeamId: (teamId: string) => Player[];
 	getTeamById: (teamId: string) => Team;
-
+	getTeamPlayersByTeamId: (teamId: string) => Player[];
 	addPlayer: (player: Omit<Player, "id">, teamId?: string) => void;
 	getPlayerTeams: (playerId: string, seasonId?: string) => string[];
 
