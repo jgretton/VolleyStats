@@ -24,7 +24,7 @@ const Page = () => {
 			<div className="size-full">
 				<MatchInfoCard matchData={matchData} />
 				<div className="mt-8 max-w-7xl border border-gray-200 rounded-lg p-6">
-					<div className="mb-6">
+					<div className="">
 						<h3 className="text-xl font-semibold text-gray-900">
 							Squad Selection
 						</h3>
@@ -33,6 +33,16 @@ const Page = () => {
 						</p>
 
 						<SquadSelection availablePlayers={availablePlayers} />
+					</div>
+				</div>
+				<div className="mt-8 max-w-7xl border border-gray-200 rounded-lg p-6">
+					<div className="">
+						<h3 className="text-xl font-semibold text-gray-900">
+							Starting Lineup
+						</h3>
+						<p className="text-sm text-gray-600 mt-1">
+							Please confirm the starting lineup for this match
+						</p>
 					</div>
 				</div>
 			</div>
