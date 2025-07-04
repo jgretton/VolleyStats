@@ -2,6 +2,7 @@
 
 import MatchInfoCard from "@/app/components/cards/MatchInfoCard";
 import { PageLayout } from "@/app/components/layouts/PageLayout";
+import PlayerItemCard from "@/app/components/matches/PlayerItemCard";
 import { useClubStore } from "@/store";
 import { Match } from "@/store/types";
 import { useParams } from "next/navigation";
@@ -21,36 +22,8 @@ const availablePlayers = [
 	{ id: "11", name: "Ryan O'Connor" },
 	{ id: "12", name: "Zoe Anderson" },
 	{ id: "13", name: "Josh Campbell" },
+	{ id: "14", name: "Jimmy Campbell" },
 ];
-
-type PlayerData = {
-	id: string;
-	name: string;
-};
-
-const PlayerItem = ({
-	player,
-	action,
-	remove,
-}: {
-	player: PlayerData;
-	action: React.MouseEventHandler;
-	remove?: boolean;
-}) => {
-	return (
-		<li
-			className={`border border-gray-200 rounded-lg py-3 px-2 hover:shadow-sm cursor-pointer transition-all inline-flex justify-between items-center ${
-				remove
-					? "hover:bg-red-50 hover:border-red-500"
-					: "hover:border-blue-500 hover:bg-blue-100 "
-			}`}
-			onClick={action}
-		>
-			<span className="text-sm font-medium">{player.name}</span>
-			{remove && <span className="text-red-500 text-xs">remove</span>}
-		</li>
-	);
-};
 
 const Page = () => {
 	const { getSingleMatch } = useClubStore();
@@ -88,12 +61,17 @@ const Page = () => {
 										{availablePlayers
 											.filter((player) => !selectedPlayers.includes(player.id))
 											.map((player) => (
-												<PlayerItem
+												<PlayerItemCard
 													action={() =>
-														setSelectedPlayers((prevState) => [
-															...prevState,
-															player.id,
-														])
+														setSelectedPlayers((prevState) => {
+															if (
+																prevState.includes(player.id) ||
+																prevState.length >= 13
+															) {
+																return prevState;
+															}
+															return [...prevState, player.id];
+														})
 													}
 													key={player.id}
 													player={player}
@@ -136,7 +114,7 @@ const Page = () => {
 												);
 												if (!player) return null;
 												return (
-													<PlayerItem
+													<PlayerItemCard
 														action={() => {
 															setSelectedPlayers((prevState) =>
 																prevState.filter((p) => p !== playerId)
