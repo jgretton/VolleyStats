@@ -15,7 +15,7 @@ export const PageLayout = ({
 }: PageLayoutProps) => {
 	return (
 		<>
-			<div className="border-b border-gray-200 bg-white">
+			<div className="border-b border-gray-200 bg-white sticky top-0">
 				<div className="px-6 py-6 sm:px-8">
 					<div className="flex items-center justify-between">
 						<div>

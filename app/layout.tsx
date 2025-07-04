@@ -13,9 +13,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`antialiased flex flex-row`}>
+			<body className={`antialiased flex flex-row h-screen overflow-hidden`}>
 				<AppSidebar />
-				<main className=" flex-1 bg-white">{children}</main>
+				<main className=" flex-1 bg-white overflow-y-auto">{children}</main>
 			</body>
 		</html>
 	);
