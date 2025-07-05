@@ -1,60 +1,70 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import PlayerItemCard from "./PlayerItemCard";
 import { Player } from "@/store/types";
 import { Button } from "../ultils/button";
+import { useMatchSetup } from "@/hooks/useMatchSetup";
 
 const SquadSelection = ({
 	availablePlayers,
+	matchId,
 }: {
+	matchId: string;
 	availablePlayers: Player[];
 }) => {
-	const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
-	const [confirmedSquad, setConfirmedSquad] = useState<boolean>(false);
+	const {
+		selectedPlayers,
+		setSelectedPlayers,
+		confirmSelectedPlayers,
+		setConfirmedSquad,
+		confirmedSquad,
+	} = useMatchSetup(matchId);
 
 	const hasMinimumPlayers = selectedPlayers.length >= 6;
 	const isFullSquad = selectedPlayers.length === 13;
 	const playersNeeded = Math.max(0, 6 - selectedPlayers.length);
 
 	return (
-		<div className="">
+		<div className="w-full">
 			{confirmedSquad && (
-				<div className="mb-4 p-4 mt-5 bg-green-50 border border-green-200 rounded-lg">
-					<div className="flex justify-between items-start">
-						<div>
-							<p className="text-green-800 font-medium">✓ Squad Confirmed</p>
-							<p className="text-sm text-green-600 mt-1">
-								{selectedPlayers.length} players selected
-							</p>
-							<div className="mt-3">
-								<p className="text-sm font-medium text-green-700 mb-2">
-									Selected Players:
+				<div className="mb-4 p-4 mt-5 bg-green-50 border border-green-200 rounded-lg w-full">
+					<div className="flex flex-col justify-between">
+						<div className="flex flex-row justify-between">
+							<div className="flex-1">
+								<p className="text-green-800 font-medium">✓ Squad Confirmed</p>
+								<p className="text-sm text-green-600 mt-1">
+									{selectedPlayers.length} players selected
 								</p>
-								<div className="flex flex-wrap gap-2">
-									{selectedPlayers.map((playerData) => {
-										const player = availablePlayers.find(
-											(p) => p.id === playerData.id
-										);
-										if (!player) return null;
-										return (
-											<span
-												key={player.id}
-												className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs"
-											>
-												{player.name}
-											</span>
-										);
-									})}
-								</div>
+							</div>
+							<Button
+								className="px-4 py-2 text-sm"
+								icon={false}
+								onClick={() => setConfirmedSquad(false)}
+							>
+								Edit Squad
+							</Button>
+						</div>
+						<div className="mt-3">
+							<p className="text-sm font-medium text-green-700 mb-2">
+								Selected Players:
+							</p>
+							<div className="flex flex-wrap gap-2">
+								{selectedPlayers.map((playerData) => {
+									const player = availablePlayers.find(
+										(p) => p.id === playerData.id
+									);
+									if (!player) return null;
+									return (
+										<span
+											key={player.id}
+											className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs"
+										>
+											{player.name}
+										</span>
+									);
+								})}
 							</div>
 						</div>
-						<Button
-							className="px-4 py-2 text-sm"
-							icon={false}
-							onClick={() => setConfirmedSquad(false)}
-						>
-							Edit Squad
-						</Button>
 					</div>
 				</div>
 			)}
@@ -150,7 +160,7 @@ const SquadSelection = ({
 						className="px-6 py-2 text-center justify-center"
 						icon={false}
 						disabled={!hasMinimumPlayers}
-						onClick={() => setConfirmedSquad(true)}
+						onClick={() => confirmSelectedPlayers()}
 					>
 						Confirm Squad
 					</Button>
