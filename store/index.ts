@@ -348,6 +348,36 @@ export const useClubStore = create<ClubStore>()(
 					throw new Error("There was no match with this id");
 				} else return singleMatch;
 			},
+			updateMatchSelectedPlayers: (matchId: string, players: Player[]) => {
+				set((state) => {
+					const matchIndex = state.club.matches.findIndex(
+						(match) => match.id === matchId
+					);
+					if (matchIndex === -1) throw new Error("Match could not be found");
+
+					const updatedMatches = [...state.club.matches];
+					updatedMatches[matchIndex] = {
+						...updatedMatches[matchIndex],
+						selectedPlayers: players,
+						confirmedSquad: true,
+					};
+
+					return {
+						...state,
+						club: {
+							...state.club,
+							matches: updatedMatches,
+						},
+					};
+				});
+			},
+			getSelectedPlayersFromMatchId: (matchId: string) => {
+				const currentState = get();
+				return (
+					currentState.club.matches.find((match) => match.id === matchId)
+						?.selectedPlayers || []
+				);
+			},
 		}),
 		{
 			name: "Lincoln-cannons-club",
