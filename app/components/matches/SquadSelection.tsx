@@ -9,7 +9,7 @@ const SquadSelection = ({
 }: {
 	availablePlayers: Player[];
 }) => {
-	const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
+	const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
 	const [confirmedSquad, setConfirmedSquad] = useState<boolean>(false);
 
 	const hasMinimumPlayers = selectedPlayers.length >= 6;
@@ -31,9 +31,9 @@ const SquadSelection = ({
 									Selected Players:
 								</p>
 								<div className="flex flex-wrap gap-2">
-									{selectedPlayers.map((playerId) => {
+									{selectedPlayers.map((playerData) => {
 										const player = availablePlayers.find(
-											(p) => p.id === playerId
+											(p) => p.id === playerData.id
 										);
 										if (!player) return null;
 										return (
@@ -69,18 +69,20 @@ const SquadSelection = ({
 					<div className="h-full overflow-y-scroll max-h-96 mt-4">
 						<ul className="flex flex-col gap-3">
 							{availablePlayers
-								.filter((player) => !selectedPlayers.includes(player.id))
+								.filter(
+									(player) =>
+										!selectedPlayers.some(
+											(selectedPlayer) => selectedPlayer.id === player.id
+										)
+								)
 								.map((player) => (
 									<PlayerItemCard
 										action={() =>
 											setSelectedPlayers((prevState) => {
-												if (
-													prevState.includes(player.id) ||
-													prevState.length >= 13
-												) {
+												if (prevState.length >= 13) {
 													return prevState;
 												}
-												return [...prevState, player.id];
+												return [...prevState, player];
 											})
 										}
 										key={player.id}
@@ -118,16 +120,16 @@ const SquadSelection = ({
 									</p>
 								</div>
 							) : (
-								selectedPlayers.map((playerId) => {
+								selectedPlayers.map((playerData) => {
 									const player = availablePlayers.find(
-										(p) => p.id === playerId
+										(p) => p.id === playerData.id
 									);
 									if (!player) return null;
 									return (
 										<PlayerItemCard
 											action={() => {
 												setSelectedPlayers((prevState) =>
-													prevState.filter((p) => p !== playerId)
+													prevState.filter((p) => p.id !== playerData.id)
 												);
 											}}
 											key={player.id}
