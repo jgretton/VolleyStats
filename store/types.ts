@@ -136,6 +136,7 @@ export interface ClubStore {
 	getMatchesByTeamId: (teamId: string) => Match[];
 	getSingleMatch: (matchId: string) => Match;
 	getAllTeamMatches: () => MatchData[];
+	updateMatchStartingLinup: (matchId: string, players: Player[]) => void;
 
 	addTeamMembership: (
 		playerId: string,

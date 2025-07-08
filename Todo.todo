@@ -1,17 +1,24 @@
-Updating data:
-    ☐ Updated Types
-    ☐ Update CRUD for Teams
-    ☐ Update CRUD for players
 
-    ☐ Update UI/UX for Teams
-    ☐ Update UI/UX for Players
     
+Continue:
+☐ Display Matches
+☐ Add actions to players
+☐ Error handling 
+☐ create uniform methods, method names
+    - form submit names
+    - name of zustand actions
+    - component names
 
 
 Error Handling:
-
     ☐ Zustand store
     ☐ all forms
 ☐ creating a match
     ☐ Add players to match
     ☐ select starting lineup
+
+
+    BUGS :
+        ☐ When updating to a new season, all players stay as active. They should change to inactive. Maybe player table needs to get the team membership active status? compare with current season?
+
+

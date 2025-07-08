@@ -378,6 +378,21 @@ export const useClubStore = create<ClubStore>()(
 						?.selectedPlayers || []
 				);
 			},
+			updateMatchStartingLinup: (matchId: string, players: Player[]) => {
+				const currentState = get();
+				const currentMatch = currentState.club.matches.findIndex(
+					(match) => match.id === matchId
+				);
+
+				// return set((state) => ({
+				// 	club: {
+				// 		...state.club,
+				// 		matches: [...state.club.matches, [currentMatch] : state.club.matches
+				// 			.find((match) => match.id === matchId)
+				// 			?.selectedPlayers.push(players),
+				// 	}],
+				// }));
+			},
 		}),
 		{
 			name: "Lincoln-cannons-club",

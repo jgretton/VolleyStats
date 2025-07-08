@@ -1,7 +1,7 @@
 import React from "react";
 
 const Page = () => {
-	return <div>single match page</div>;
+	return <div>Single match details</div>;
 };
 
 export default Page;
