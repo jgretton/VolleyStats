@@ -21,7 +21,7 @@ export interface Match {
 	venue: "home" | "away";
 	selectedPlayers: Player[];
 	confirmedSquad?: boolean;
-	startingLineup?: Player[];
+	startingLineup?: Lineup[];
 	status: "upcoming" | "in-progress" | "completed" | "cancelled";
 	teamScore?: number;
 	opponentScore?: number;
@@ -108,6 +108,11 @@ export interface Club {
 	matchStats: MatchStats[];
 }
 
+export interface Lineup {
+	position: number | string;
+	player: Player;
+}
+
 export interface ClubStore {
 	club: Club;
 
@@ -136,7 +141,9 @@ export interface ClubStore {
 	getMatchesByTeamId: (teamId: string) => Match[];
 	getSingleMatch: (matchId: string) => Match;
 	getAllTeamMatches: () => MatchData[];
-	updateMatchStartingLinup: (matchId: string, players: Player[]) => void;
+	// updateMatchStartingLinup: (matchId: string, players: Player[]) => void;
+	updateMatchStartingLinup: (matchId: string, lineup: Lineup[]) => void;
+	getMatchStartingLineup: (matchId: string) => Lineup[] | undefined;
 
 	addTeamMembership: (
 		playerId: string,

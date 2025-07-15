@@ -1,10 +1,8 @@
 import { Player } from "@/store/types";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "../ultils/button";
 import { useClubStore } from "@/store";
 import PlayerItemCard from "./PlayerItemCard";
-import VolleyballCourt from "../ultils/VolleyballCourt";
-import Court from "../ultils/Court";
 import { getPlayerInitials } from "@/utils";
 
 /*
@@ -16,7 +14,13 @@ type AssignmentData = {
 	position: number;
 	player: Player | null;
 };
-const StartingLineupSelection = ({ matchId }: { matchId: string }) => {
+const StartingLineupSelection = ({
+	matchId,
+	onLineupConfirmed,
+}: {
+	matchId: string;
+	onLineupConfirmed?: () => void;
+}) => {
 	const [assignments, setAssignments] = useState<AssignmentData[]>([
 		{ position: 1, player: null },
 		{ position: 2, player: null },
@@ -31,7 +35,58 @@ const StartingLineupSelection = ({ matchId }: { matchId: string }) => {
 	>(null);
 	const [openPlayerSelectModal, setOpenPlayerSelectModal] =
 		useState<boolean>(false);
-	const { getSelectedPlayersFromMatchId } = useClubStore();
+	const {
+		getSelectedPlayersFromMatchId,
+		updateMatchStartingLinup,
+		getMatchStartingLineup,
+	} = useClubStore();
+
+	// Load existing lineup on component mount
+	useEffect(() => {
+		const existingLineup = getMatchStartingLineup(matchId);
+		if (existingLineup && existingLineup.length > 0) {
+			// Populate court positions
+			const courtAssignments = existingLineup
+				.filter((item) => typeof item.position === "number")
+				.map((item) => ({
+					position: item.position as number,
+					player: item.player,
+				}));
+
+			// Create new assignments array with existing data
+			const newAssignments = [
+				{ position: 1, player: null },
+				{ position: 2, player: null },
+				{ position: 3, player: null },
+				{ position: 4, player: null },
+				{ position: 5, player: null },
+				{ position: 6, player: null },
+			];
+
+			// Update with existing assignments
+			courtAssignments.forEach((assignment) => {
+				const index = newAssignments.findIndex(
+					(a) => a.position === assignment.position
+				);
+				if (index !== -1) {
+					newAssignments[index] = {
+						position: assignment.position,
+						player: assignment.player,
+					};
+				}
+			});
+
+			setAssignments(newAssignments);
+
+			// Set libero if exists
+			const existingLibero = existingLineup.find(
+				(item) => item.position === "libero"
+			)?.player;
+			if (existingLibero) {
+				setLibero(existingLibero);
+			}
+		}
+	}, [matchId, getMatchStartingLineup]);
 
 	const displayOrder = [4, 3, 2, 5, 6, 1]; // grid order
 
@@ -44,10 +99,11 @@ const StartingLineupSelection = ({ matchId }: { matchId: string }) => {
 		setOpenPlayerSelectModal(true);
 	};
 
-	const handlePlayerSelect = (player) => {
+	const handlePlayerSelect = (player: Player) => {
 		if (selectedPosition === "libero") {
+			console.log(player);
 			setLibero(player);
-		} else {
+		} else if (typeof selectedPosition === "number") {
 			const newAssignments = [...assignments];
 			newAssignments[selectedPosition - 1] = {
 				position: selectedPosition,
@@ -59,7 +115,7 @@ const StartingLineupSelection = ({ matchId }: { matchId: string }) => {
 		setSelectedPosition(null);
 	};
 
-	const removeSelectedPlayer = (player) => {
+	const removeSelectedPlayer = (player: Player) => {
 		setAssignments((prevState) =>
 			prevState.map((assignment) =>
 				assignment.player?.id === player.id
@@ -71,74 +127,109 @@ const StartingLineupSelection = ({ matchId }: { matchId: string }) => {
 
 	const selectedMatchPlayers = getSelectedPlayersFromMatchId(matchId);
 
+	const handleLineupConfirmation = () => {
+		//check to see if the assignments has all positions filled.
+		const checkForNull = assignments.find(
+			(position) => position.player === null
+		);
+
+		if (checkForNull) console.log("PICK POSITIONS");
+		else {
+			// Create lineup array with all court positions
+			const lineup = assignments
+				.filter((assignment) => assignment.player !== null)
+				.map((assignment) => ({
+					position: assignment.position,
+					player: assignment.player!,
+				}));
+
+			// Add libero if assigned
+			if (libero) {
+				lineup.push({ position: "libero" as const, player: libero });
+			}
+
+			updateMatchStartingLinup(matchId, lineup);
+
+			// Call the callback to notify parent component
+			if (onLineupConfirmed) {
+				onLineupConfirmed();
+			}
+		}
+		// If filled, confirm
+	};
 	const isLineupComplete = assignments.every(
 		(position) => position.player !== null
 	);
 	return (
 		<div className="flex lg:flex-row flex-col">
-			<div className="max-w-lg w-full p-5 bg-green-800/70 rounded-xl flex flex-col">
-				<Court>
-					<div className="size-full grid grid-cols-3 grid-rows-2 gap-2 relative">
+			<div className="flex-1">
+				<p className="text-sm font-medium text-gray-700 mb-3">
+					Court Formation:
+				</p>
+
+				{/* Mini Court Layout */}
+				<div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm">
+					<div className="grid grid-cols-3 grid-rows-2 gap-2 h-32">
 						{courtPositions.map((player) => {
+							// const assignment = assignments.find((a) => a.position === pos);
 							return (
-								<div className="size-full p-4" key={player?.position}>
-									<div
-										className={`
-    relative size-full rounded-lg border-2 transition-all duration-200 cursor-pointer
-    ${
-			player?.player
-				? "bg-white border-blue-500 shadow-sm hover:shadow-md"
-				: "bg-gray-50/50 border-gray-300 hover:border-blue-400 hover:bg-gray-100"
-		}
-    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-  `}
-									>
-										{player?.player ? (
-											<>
-												<button
-													className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full size-6 flex items-center justify-center text-xs font-bold transition-colors duration-200 cursor-pointer"
-													onClick={() => {
-														removeSelectedPlayer(player.player);
-													}}
-												>
-													×
-												</button>
-												<button
-													onClick={() =>
-														handlePostitionSelect(player?.position)
-													}
-													className="size-full flex flex-col items-center justify-center h-full cursor-pointer"
-												>
-													<span className="text-lg font-bold text-gray-900">
-														{player.player.number}
-													</span>
-													<span className="text-xs font-medium text-gray-600 mt-1">
-														{getPlayerInitials(player.player.name)}
-													</span>
-												</button>
-											</>
-										) : (
+								<div
+									key={player?.position}
+									// className="bg-gray-50 border border-gray-200 rounded flex flex-col items-center justify-center text-xs"
+									className={`
+                                            relative size-full rounded-lg border-2 transition-all duration-200 cursor-pointer
+                                            ${
+																							player?.player
+																								? "bg-white border-blue-500 shadow-sm hover:shadow-md"
+																								: "bg-gray-50/50 border-gray-300 hover:border-blue-400 hover:bg-gray-100"
+																						}
+                                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                                        `}
+								>
+									{player?.player ? (
+										<>
+											<button
+												className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full size-6 flex items-center justify-center text-xs font-bold transition-colors duration-200 cursor-pointer"
+												onClick={() => {
+													removeSelectedPlayer(player.player);
+												}}
+											>
+												×
+											</button>
 											<button
 												onClick={() => handlePostitionSelect(player?.position)}
-												className="size-full flex flex-col items-center justify-center h-full cursor-pointer"
+												className="size-full flex flex-col items-center justify-center h-full cursor-pointer bg-blue-100 rounded-lg"
 											>
-												<span className="text-sm font-medium text-gray-800">
-													Position {player?.position}
+												<span className="text-xs text-gray-900">
+													{player.player.number}
 												</span>
-												<span className="text-xs text-gray-900 mt-1">
-													Click to assign
+												<span className="text-sm font-bold text-gray-600 mt-1">
+													{getPlayerInitials(player.player.name)}
 												</span>
 											</button>
-										)}
-									</div>
+										</>
+									) : (
+										<button
+											onClick={() =>
+												player?.position &&
+												handlePostitionSelect(player.position)
+											}
+											className="size-full flex flex-col items-center justify-center h-full cursor-pointer"
+										>
+											<span className="text-xs  text-gray-6   00">
+												P{player?.position}
+											</span>
+										</button>
+									)}
 								</div>
 							);
 						})}
 					</div>
-				</Court>
-				<div
-					className={`
-    mt-4 px-4 py-3 rounded-lg border-2 transition-all duration-200 w-full max-w-xs relative mx-auto
+
+					{/* Libero Display */}
+					<div
+						className={`
+    mt-4 rounded-lg border-2 transition-all duration-200  w-full relative mx-auto max-w-fit
     ${
 			libero
 				? "bg-white border-blue-500 shadow-sm hover:shadow-md text-gray-900"
@@ -146,43 +237,47 @@ const StartingLineupSelection = ({ matchId }: { matchId: string }) => {
 		}
     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
   `}
-				>
-					{libero ? (
-						<>
-							{/* Clear button */}
-							<button
-								className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full size-6 flex items-center justify-center text-xs font-bold transition-colors duration-200 z-10 cursor-pointer"
-								onClick={() => {
-									setLibero(null);
-								}}
-							>
-								×
-							</button>
+					>
+						{libero ? (
+							<>
+								<button
+									className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full size-6 flex items-center justify-center text-xs font-bold transition-colors duration-200 z-10 cursor-pointer"
+									onClick={() => {
+										setLibero(null);
+									}}
+								>
+									×
+								</button>
 
+								<button
+									onClick={() => handlePostitionSelect("libero")}
+									className="flex flex-row items-center size-full rounded-lg py-2 px-4 cursor-pointer gap-2 bg-blue-200"
+								>
+									<span className="text-sm font-medium text-gray-600">
+										Libero:
+									</span>
+									<div className="flex items-center  gap-2">
+										<span className="text-xs font-bold"> #{libero.number}</span>
+										<span className="text-sm font-medium">
+											{getPlayerInitials(libero.name)}
+										</span>
+									</div>
+								</button>
+							</>
+						) : (
 							<button
 								onClick={() => handlePostitionSelect("libero")}
-								className="flex flex-col items-center size-full cursor-pointer"
+								className="flex flex-col items-center size-full cursor-pointer py-2 px-4"
 							>
-								<span className="text-sm font-medium text-gray-600">
-									Libero
-								</span>
-								<div className="flex items-center gap-2 mt-1">
-									<span className="text-lg font-bold">{libero.number}</span>
-									<span className="text-sm font-medium">
-										{getPlayerInitials(libero.name)}
+								<span className="text-sm font-medium">
+									Libero{" "}
+									<span className="text-xs mt-1 font-light text-gray-600">
+										(Optional)
 									</span>
-								</div>
+								</span>
 							</button>
-						</>
-					) : (
-						<button
-							onClick={() => handlePostitionSelect("libero")}
-							className="flex flex-col items-center size-full cursor-pointer"
-						>
-							<span className="text-sm font-medium">Libero</span>
-							<span className="text-xs mt-1">Optional - Click to assign</span>
-						</button>
-					)}
+						)}
+					</div>
 				</div>
 			</div>
 			<div className="mt-10">
@@ -222,7 +317,12 @@ const StartingLineupSelection = ({ matchId }: { matchId: string }) => {
 					</div>
 				</div>
 
-				<Button type="button" icon={false} variant="primary">
+				<Button
+					type="button"
+					icon={false}
+					variant="primary"
+					onClick={handleLineupConfirmation}
+				>
 					Confirm Lineup
 				</Button>
 			</div>
@@ -240,7 +340,7 @@ const StartingLineupSelection = ({ matchId }: { matchId: string }) => {
 										!assignments.some(
 											(selectedPlayer) =>
 												selectedPlayer.player?.id === player.id
-										)
+										) && libero?.id !== player.id
 								)
 								.map((player) => (
 									<PlayerItemCard

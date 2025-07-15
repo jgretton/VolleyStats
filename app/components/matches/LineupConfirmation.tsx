@@ -1,4 +1,5 @@
 import { getPlayerInitials } from "@/utils";
+import { Button } from "../ultils/button";
 
 export const LineupConfirmation = ({
 	assignments,
@@ -23,12 +24,14 @@ export const LineupConfirmation = ({
 							{filledPositions} starters{libero ? " + 1 libero" : ""}
 						</p>
 					</div>
-					<button
-						className="px-4 py-2 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+					<Button
+						variant="secondary"
 						onClick={onEditLineup}
+						icon={false}
+						size="sm"
 					>
 						Edit Lineup
-					</button>
+					</Button>
 				</div>
 
 				{/* Main Content */}

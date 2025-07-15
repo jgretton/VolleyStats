@@ -37,7 +37,9 @@ const SquadSelection = ({
 								</p>
 							</div>
 							<Button
-								className="px-4 py-2 text-sm"
+								className="self-start"
+								variant="secondary"
+								size="sm"
 								icon={false}
 								onClick={() => setConfirmedSquad(false)}
 							>

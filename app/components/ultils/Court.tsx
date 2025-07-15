@@ -2,7 +2,7 @@ import React from "react";
 
 const Court = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<div className="flex justify-center items-center size-full p-4 relative">
+		<div className="flex justify-center items-center size-full p-4 relative z-0">
 			<div className="relative w-full max-w-2xl h-full">
 				<div className="relative aspect-[5/6]">
 					<div className="absolute inset-0 flex flex-col size-full">

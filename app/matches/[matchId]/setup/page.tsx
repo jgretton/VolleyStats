@@ -8,9 +8,15 @@ import StartingLineupSelection from "@/app/components/matches/StartingLineupSele
 import { useClubStore } from "@/store";
 import { Match, Player } from "@/store/types";
 import { useParams } from "next/navigation";
+import { useState } from "react";
 
 const Page = () => {
-	const { getSingleMatch, getTeamPlayersByTeamId, club } = useClubStore();
+	const {
+		getSingleMatch,
+		getTeamPlayersByTeamId,
+		club,
+		getMatchStartingLineup,
+	} = useClubStore();
 	const params = useParams();
 	const matchId = params.matchId as string;
 
@@ -22,18 +28,32 @@ const Page = () => {
 		(match) => match.id === matchData.id
 	)?.confirmedSquad;
 
-	const confirmedLineup = true;
+	const startingLineup = getMatchStartingLineup(matchId);
+	const confirmedLineup = startingLineup && startingLineup.length > 0;
 
-	const mockAssignments = [
-		{ position: 1, player: { id: "1", name: "Sarah Johnson", number: 8 } },
-		{ position: 2, player: { id: "2", name: "Mike Chen", number: 12 } },
-		{ position: 3, player: { id: "3", name: "Emma Wilson", number: 3 } },
-		{ position: 4, player: { id: "4", name: "Jake Thompson", number: 7 } },
-		{ position: 5, player: { id: "5", name: "Lisa Rodriguez", number: 15 } },
-		{ position: 6, player: { id: "6", name: "Tom Anderson", number: 11 } },
-	];
+	// Convert lineup to assignments format for LineupConfirmation component
+	const assignments =
+		startingLineup
+			?.filter((item) => typeof item.position === "number")
+			.map((item) => ({
+				position: item.position as number,
+				player: item.player,
+			})) || [];
 
-	const mockLibero = { id: "7", name: "Alex Kim", number: 5 };
+	const libero = startingLineup?.find(
+		(item) => item.position === "libero"
+	)?.player;
+
+	// State to control whether to show lineup selection or confirmation
+	const [isEditingLineup, setIsEditingLineup] = useState(false);
+
+	const handleEditLineup = () => {
+		setIsEditingLineup(true);
+	};
+
+	const handleLineupConfirmed = () => {
+		setIsEditingLineup(false);
+	};
 
 	return (
 		<PageLayout
@@ -68,16 +88,25 @@ const Page = () => {
 								squad for this match
 							</p>
 						) : (
-							<StartingLineupSelection matchId={matchData.id} />
-						)}
+							<>
+								{/* Show lineup selection if editing or no lineup exists */}
+								{(isEditingLineup || !confirmedLineup) && (
+									<StartingLineupSelection
+										matchId={matchData.id}
+										onLineupConfirmed={handleLineupConfirmed}
+									/>
+								)}
 
-						{confirmedLineup && (
-							<LineupConfirmation
-								assignments={mockAssignments}
-								libero={mockLibero}
-								confirmedLineup={confirmedLineup}
-								onEditLineup={() => console.log("helo")}
-							/>
+								{/* Show lineup confirmation if lineup exists and not editing */}
+								{confirmedLineup && !isEditingLineup && (
+									<LineupConfirmation
+										assignments={assignments}
+										libero={libero}
+										confirmedLineup={confirmedLineup}
+										onEditLineup={handleEditLineup}
+									/>
+								)}
+							</>
 						)}
 					</div>
 				</div>

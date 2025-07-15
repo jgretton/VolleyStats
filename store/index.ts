@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { ClubStore, Match, MatchData, Player } from "./types";
+import { ClubStore, Lineup, Match, MatchData, Player } from "./types";
 
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -378,20 +378,32 @@ export const useClubStore = create<ClubStore>()(
 						?.selectedPlayers || []
 				);
 			},
-			updateMatchStartingLinup: (matchId: string, players: Player[]) => {
-				const currentState = get();
-				const currentMatch = currentState.club.matches.findIndex(
-					(match) => match.id === matchId
-				);
+			updateMatchStartingLinup: (matchId: string, lineup: Lineup[]) => {
+				set((state) => {
+					const matchIndex = state.club.matches.findIndex(
+						(match) => match.id === matchId
+					);
+					
+					if (matchIndex === -1) throw new Error("Match could not be found");
 
-				// return set((state) => ({
-				// 	club: {
-				// 		...state.club,
-				// 		matches: [...state.club.matches, [currentMatch] : state.club.matches
-				// 			.find((match) => match.id === matchId)
-				// 			?.selectedPlayers.push(players),
-				// 	}],
-				// }));
+					const updatedMatches = [...state.club.matches];
+					updatedMatches[matchIndex] = {
+						...updatedMatches[matchIndex],
+						startingLineup: lineup,
+					};
+
+					return {
+						...state,
+						club: {
+							...state.club,
+							matches: updatedMatches,
+						},
+					};
+				});
+			},
+			getMatchStartingLineup: (matchId: string) => {
+				const currentState = get();
+				return currentState.club.matches.find((match) => match.id === matchId)?.startingLineup;
 			},
 		}),
 		{
