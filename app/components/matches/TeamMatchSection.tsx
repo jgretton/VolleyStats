@@ -18,6 +18,11 @@ const TeamMatchSection = ({ teamData }: { teamData: MatchData }) => {
 		//+date as i need to convert them to numbers.
 		(a, b) => +new Date(a.date) - +new Date(b.date)
 	)[0];
+
+	const squadSelected = nextUpcoming.selectedPlayers.length > 0;
+	const lineupSet = (nextUpcoming.startingLineup?.length ?? 0) > 0;
+	const completedTasks = [squadSelected, lineupSet].filter(Boolean).length;
+
 	return (
 		<div className="rounded-lg w-full bg-gray-50 border border-gray-200  p-6">
 			<div className="flex justify-between">
@@ -70,10 +75,39 @@ const TeamMatchSection = ({ teamData }: { teamData: MatchData }) => {
 								</Link>
 							</div>
 						</div>
-						<p className="text-xs text-gray-500 mt-2">
-							Use "Match Setup" to choose which players will be available for
-							this match
-						</p>
+
+						<div className="mt-3 pt-3 border-t border-gray-100">
+							<div className="flex items-center gap-2">
+								<span className="text-xs text-gray-500">
+									Match preparation progress
+								</span>
+								<span className="text-xs text-gray-400">
+									({completedTasks} of 2 complete)
+								</span>
+							</div>
+							<div className="mt-2 flex gap-4">
+								<div className="flex items-center gap-2">
+									<div
+										className={`size-2 rounded-full ${
+											squadSelected ? "bg-green-500" : "bg-gray-300"
+										}`}
+									/>
+									<span className="text-xs text-gray-600">
+										Available players selected
+									</span>
+								</div>
+								<div className="flex items-center gap-2">
+									<div
+										className={`size-2 rounded-full ${
+											lineupSet ? "bg-green-500" : "bg-gray-300"
+										}`}
+									/>
+									<span className="text-xs text-gray-600">
+										Starting lineup finalised
+									</span>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
